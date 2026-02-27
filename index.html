@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>高小名 · 個人簡歷</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a6fc4;
+      --blue-light: #3b8de0;
+      --accent: #e8f0fb;
+      --dark: #1c1c97;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --corner: 6px;
+    }
+
+    body {
+      font-family: 'Noto Serif TC', serif;
+      background: #f0f4fa;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 680px;
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(67, 124, 181, 0.18);
+      animation: fadeUp .7s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(30px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      height: 300px;
+      background: linear-gradient(120deg, #bdd4ef 0%, #88b4dc 50%, #5a90c8 100%);
+      overflow: hidden;
+    }
+
+    /* blue bracket corners */
+    .hero::before, .hero::after,
+    .corner-br, .corner-bl {
+      content: '';
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      border-color: var(--blue);
+      border-style: solid;
+      z-index: 3;
+    }
+    .hero::before  { top: 14px; left: 14px;  border-width: 3px 0 0 3px; }
+    .hero::after   { top: 14px; right: 14px; border-width: 3px 3px 0 0; }
+    .corner-br { bottom: 14px; right: 14px; border-width: 0 3px 3px 0; }
+    .corner-bl { bottom: 14px; left: 14px;  border-width: 0 0 3px 3px; }
+
+    /* landscape photo mock */
+    .hero-photo {
+      position: absolute;
+      inset: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      opacity: .55;
+    }
+
+    /* portrait circle */
+    .portrait {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -58%);
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255,255,255,.7);
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+      z-index: 2;
+    }
+
+    /* text block */
+    .hero-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      text-align: center;
+      padding: 16px 24px 24px;
+      background: linear-gradient(to top, rgba(20,50,100,.55) 0%, transparent 100%);
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--white);
+      letter-spacing: .08em;
+      text-shadow: 0 2px 8px rgba(0,0,0,.35);
+    }
+
+    .hero-divider {
+      width: 48px;
+      height: 2px;
+      background: rgba(255,255,255,.7);
+      margin: 8px auto;
+    }
+
+    .hero-role {
+      font-size: .8rem;
+      color: rgba(255,255,255,.85);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hero-tagline {
+      font-size: .95rem;
+      color: rgba(255,255,255,.9);
+      font-style: italic;
+    }
+
+    /* ── Info section ── */
+    .info {
+      padding: 32px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 32px;
+      border-bottom: 1px solid #e5eaf3;
+    }
+
+    .info-item label {
+      display: block;
+      font-size: .72rem;
+      color: var(--blue);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .info-item span {
+      font-size: .95rem;
+      color: var(--dark);
+    }
+
+    /* ── Skills ── */
+    .skills-section {
+      padding: 28px 40px;
+      border-bottom: 1px solid #e5eaf3;
+    }
+
+    .section-title {
+      font-size: .75rem;
+      color: var(--blue);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .skill {
+      margin-bottom: 12px;
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .skill-bar {
+      height: 5px;
+      background: #dde6f5;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue) 0%, var(--blue-light) 100%);
+      border-radius: 99px;
+      transform-origin: left;
+      animation: barGrow .9s ease both;
+    }
+
+    @keyframes barGrow {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    /* ── Portfolio grid ── */
+    .portfolio-section {
+      padding: 28px 40px 36px;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: 50%;
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,111,196,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .35s;
+      border-radius: 50%;
+    }
+
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-label {
+      position: absolute;
+      bottom: 6px;
+      width: 100%;
+      text-align: center;
+      font-size: .72rem;
+      color: var(--white);
+      text-shadow: 0 1px 4px rgba(0,0,0,.6);
+      letter-spacing: .05em;
+    }
+
+    /* placeholder avatar colours */
+    .p1 { background: #c0392b; }
+    .p2 { background: #2980b9; }
+    .p3 { background: #27ae60; }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+    }
+
+    /* ── Contact bar ── */
+    .contact-bar {
+      background: var(--blue);
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      padding: 16px;
+    }
+
+    .contact-bar a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .8rem;
+      letter-spacing: .08em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .2s;
+    }
+
+    .contact-bar a:hover { color: var(--white); }
+
+    .contact-bar svg { width: 15px; height: 15px; fill: currentColor; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ── Hero ── -->
+  <div class="hero">
+    <!-- Background landscape (gradient stands in for photo) -->
+    <!-- portrait -->
+    <img class="portrait" src="image/neven-krcmarek-pOWBHdgy1Lo-unsplash.jpg" alt="高小名" />
+
+    <div class="corner-br"></div>
+    <div class="corner-bl"></div>
+
+    <div class="hero-text">
+      <div class="hero-name">高小名</div>
+      <div class="hero-divider"></div>
+      <div class="hero-role">認真負責</div>
+      <div class="hero-tagline">努力，但不費力：只做最重要的事，其實沒有你想的那麼難！</div>
+    </div>
+  </div>
+
+  <!-- ── Basic Info ── -->
+  <div class="info">
+    <div class="info-item">
+      <label>年齡</label>
+      <span>XX 歲</span>
+    </div>
+    <div class="info-item">
+      <label>學歷</label>
+      <span>XX</span>
+    </div>
+    <div class="info-item">
+      <label>工作經驗</label>
+      <span>2 年</span>
+    </div>
+    <div class="info-item">
+      <label>現職</label>
+      <span>UI/UX 設計師</span>
+    </div>
+    <div class="info-item">
+      <label>所在地</label>
+      <span>台中市</span>
+    </div>
+    <div class="info-item">
+      <label>電子郵件</label>
+      <span>kao@example.com</span>
+    </div>
+  </div>
+
+  <!-- ── Skills ── -->
+  <div class="skills-section">
+    <div class="section-title">專業技能</div>
+
+    <div class="skill">
+      <div class="skill-header"><span>UI / UX 設計</span><span>95%</span></div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:95%;animation-delay:.1s"></div></div>
+    </div>
+    <div class="skill">
+      <div class="skill-header"><span>Figma / Sketch</span><span>90%</span></div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:90%;animation-delay:.2s"></div></div>
+    </div>
+    <div class="skill">
+      <div class="skill-header"><span>HTML / CSS</span><span>80%</span></div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:80%;animation-delay:.3s"></div></div>
+    </div>
+    <div class="skill">
+      <div class="skill-header"><span>品牌視覺</span><span>85%</span></div>
+      <div class="skill-bar"><div class="skill-bar-fill" style="width:85%;animation-delay:.4s"></div></div>
+    </div>
+  </div>
+
+  <!-- ── Portfolio ── -->
+  <div class="portfolio-section">
+    <div class="section-title">作品集</div>
+    <div class="portfolio-grid">
+
+      <div class="portfolio-item">
+        <div class="p1 avatar-placeholder">😊</div>
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-label">作品集一</div>
+      </div>
+
+      <div class="portfolio-item">
+        <div class="p2 avatar-placeholder">🎨</div>
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-label">作品集二</div>
+      </div>
+
+      <div class="portfolio-item">
+        <div class="p3 avatar-placeholder">🖌️</div>
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-label">作品集三</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Contact ── -->
+  <div class="contact-bar">
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      kao@example.com
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.01l-2.2 2.21z"/></svg>
+      0981-XXX-XXX
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 019.5 9a2.5 2.5 0 015 0A2.5 2.5 0 0112 11.5z"/></svg>
+      台中市西屯區
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>

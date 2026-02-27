@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>派對公司時間軸</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 40px 0;
+            color: #333;
+            animation: fadeInDown 1.5s ease;
+        }
+
+        .timeline-section {
+            position: relative;
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px 0;
+        }
+
+        .timeline-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ff4081;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            padding: 20px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .timeline-item.left {
+            left: 0;
+        }
+
+        .timeline-item.right {
+            left: 50%;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff4081;
+            border: 3px solid white;
+            left: -10px;
+        }
+
+        .timeline-item.right::before {
+            left: -10px;
+        }
+
+        .pimg {
+            height: 200px;
+            background-position: center center;
+            background-size: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: transform 0.8s ease;
+        }
+
+        .pimg:hover {
+            transform: scale(1.05);
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline-section::before {
+                display: none;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                margin-bottom: 20px;
+            }
+
+            .timeline-item::before {
+                display: none;
+            }
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 捲動觸發效果 */
+        .timeline-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>派對公司活動時間軸</h1>
+    <div class="timeline-section">
+        <div class="timeline-item left">
+            <div class="timeline-content">
+                <div class="pimg" style="background-image: url(image/02.jpg);"></div>
+                <h3>派對策劃</h3>
+                <p>我們的專業團隊為您設計獨一無二的派對主題。</p>
+            </div>
+        </div>
+        <div class="timeline-item right">
+            <div class="timeline-content">
+                <div class="pimg" style="background-image: url(image/baker.jpg);"></div>
+                <h3>場地布置</h3>
+                <p>精緻的場地佈置，營造夢幻氛圍。</p>
+            </div>
+        </div>
+        <div class="timeline-item left">
+            <div class="timeline-content">
+                <div class="pimg" style="background-image: url(image/baker03.jpg);"></div>
+                <h3>派對進行</h3>
+                <p>現場活動與互動遊戲，讓賓客盡情享受。</p>
+            </div>
+        </div>
+        <div class="timeline-item right">
+            <div class="timeline-content">
+                <div class="pimg" style="background-image: url(image/01.jpg);"></div>
+                <h3>完美收尾</h3>
+                <p>留下美好回憶，派對圓滿結束。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 捲動時觸發動畫
+        const items = document.querySelectorAll(".timeline-item");
+        window.addEventListener("scroll", () => {
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    item.classList.add("show");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 手機響應式必要 -->
+    <title>餐點多選下拉選單</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="mycss01.css">
+    <style>
+        select {
+            text-align: center;
+            text-align-last: center;
+        }
+        .meal-info {
+            margin-top: 20px;
+        }
+        .meal-card {
+            display: inline-block;
+            width: 220px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            vertical-align: top;
+        }
+        .meal-card img {
+            max-width: 100%;
+            height: auto; /* 保持比例 */
+            border-radius: 8px;
+        }
+        .meal-card input {
+            width: 60px;
+            text-align: center;
+            margin-top: 5px;
+        }
+        .subtotal {
+            margin-top: 5px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .discount {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        /* 手機版調整 */
+        @media (max-width: 576px) {
+            .meal-card {
+                width: 100%;   /* 手機全寬顯示 */
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+       
+    <div class="container mt-5">
+        <h3>餐點選擇</h3>
+        <div class="mb-3">
+            <select class="form-select" id="mealSelect" multiple>
+                <option disabled>***請選擇餐點 (可多選)***</option>
+            </select>
+        </div>
+        <button type="button" class="btn btn-primary" id="submitBtn">送出</button>
+
+        <!-- 顯示餐點資訊 -->
+        <div class="meal-info" id="mealInfo"></div>
+        <h4 id="totalPrice">總價：0 元</h4>
+        <h4 class="discount" id="discountInfo"></h4>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-4.0.0.min.js"></script>
+    <script>
+        // JSON 餐點清單 (含圖片與價格)
+        const meals = {
+            "早餐": [
+                { "name": "蛋餅", "price": 35, "img": "https://example.com/danbing.jpg" },
+                { "name": "燒餅油條", "price": 40, "img": "https://example.com/shaobing.jpg" },
+                { "name": "漢堡", "price": 50, "img": "https://example.com/burger.jpg" }
+            ],
+            "午餐": [
+                { "name": "便當", "price": 80, "img": "https://example.com/bento.jpg" },
+                { "name": "牛肉麵", "price": 120, "img": "https://example.com/beefnoodle.jpg" },
+                { "name": "炒飯", "price": 90, "img": "https://example.com/friedrice.jpg" }
+            ],
+            "晚餐": [
+                { "name": "火鍋", "price": 250, "img": "https://example.com/hotpot.jpg" },
+                { "name": "燒烤", "price": 300, "img": "https://example.com/bbq.jpg" },
+                { "name": "壽司", "price": 200, "img": "https://example.com/sushi.jpg" }
+            ],
+            "飲料": [
+                { "name": "紅茶", "price": 25, "img": "https://example.com/blacktea.jpg" },
+                { "name": "綠茶", "price": 25, "img": "https://example.com/greentea.jpg" },
+                { "name": "咖啡", "price": 60, "img": "https://example.com/coffee.jpg" }
+            ]
+        };
+
+        // 初始化下拉選單
+        $(document).ready(function () {
+            let mealSelect = $("#mealSelect");
+            for (let category in meals) {
+                let optGroup = $("<optgroup>").attr("label", category);
+                meals[category].forEach(function (item) {
+                    optGroup.append($("<option>").val(item.name).text(item.name));
+                });
+                mealSelect.append(optGroup);
+            }
+        });
+
+        // 更新顯示餐點資訊與總價
+        function updateMealInfo() {
+            let selectedMeals = $("#mealSelect").val(); // 陣列
+            let mealInfoDiv = $("#mealInfo");
+            mealInfoDiv.empty();
+
+            if (selectedMeals && selectedMeals.length > 0) {
+                for (let category in meals) {
+                    meals[category].forEach(function (item) {
+                        if (selectedMeals.includes(item.name)) {
+                            mealInfoDiv.append(
+                                `<div class="meal-card">
+                                    <h5>${item.name}</h5>
+                                    <p>單價：${item.price} 元</p>
+                                    <img src="${item.img}" alt="${item.name}">
+                                    <div>
+                                        數量：<input type="number" min="1" value="1" 
+                                            data-price="${item.price}" 
+                                            class="qty-input" 
+                                            data-name="${item.name}">
+                                    </div>
+                                    <div class="subtotal" id="subtotal-${item.name}">
+                                        小計：${item.price} 元
+                                    </div>
+                                </div>`
+                            );
+                        }
+                    });
+                }
+            }
+
+            // 監聽數量輸入變化
+            $(".qty-input").on("input", function () {
+                calculateTotal();
+            });
+
+            calculateTotal();
+        }
+
+        // 計算總價並更新小計與折扣
+        function calculateTotal() {
+            let total = 0;
+            $(".qty-input").each(function () {
+                let qty = parseInt($(this).val());
+                let price = parseInt($(this).data("price"));
+                let name = $(this).data("name");
+                if (!isNaN(qty) && qty > 0) {
+                    let subtotal = qty * price;
+                    total += subtotal;
+                    $(`#subtotal-${name}`).text("小計：" + subtotal + " 元");
+                }
+            });
+
+            // 折扣判斷
+            let discountText = "";
+            let finalTotal = total;
+            if (total >= 1000) {
+                finalTotal = Math.round(total * 0.8);
+                discountText = "滿 1000 元打 8 折 → 折扣後：" + finalTotal + " 元";
+            } else if (total >= 500) {
+                finalTotal = Math.round(total * 0.9);
+                discountText = "滿 500 元打 9 折 → 折扣後：" + finalTotal + " 元";
+            }
+
+            $("#totalPrice").text("總價：" + total + " 元");
+            $("#discountInfo").text(discountText);
+        }
+
+        // 監聽 change 事件
+        $("#mealSelect").on("change", function () {
+            updateMealInfo();
+        });
+
+        // 防呆送出
+        $("#submitBtn").on("click", function () {
+            let selectedMeals = $("#mealSelect").val();
+            if (!selectedMeals || selectedMeals.length === 0) {
+                alert("請至少選擇一項餐點！");
+            } else {
+                let orderSummary = [];
+                $(".qty-input").each(function () {
+                    let qty = parseInt($(this).val());
+                    let name = $(this).data("name");
+                    let price = parseInt($(this).data("price"));
+                    if (!isNaN(qty) && qty > 0) {
+                        orderSummary.push(name + " x " + qty + " → 小計：" + (qty * price) + " 元");
+                    }
+                });
+                alert("您選擇的餐點有：\n" + orderSummary.join("\n") + "\n" + $("#totalPrice").text() + "\n" + $("#discountInfo").text());
+            }
+        });
+    </script>
+</body>
+
+</html>
