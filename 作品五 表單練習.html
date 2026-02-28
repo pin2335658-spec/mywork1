@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表單驗證</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <style>
+        .valid-feedback-icon {
+            color: green;
+            font-size: 1rem;
+            margin-left: 8px;
+        }
+
+        .invalid-feedback-icon {
+            color: red;
+            font-size: 1rem;
+            margin-left: 8px;
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            color: gray;
+            margin-left: 5px;
+        }
+
+        .count {
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="display-3 p-3 my-4 fw-900">表單相關應用</div>
+        <div class="h2 py-3 fw-900 text-secondary">防呆機制驗證</div>
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="username01">帳號</label>
+                    <input type="text" class="form-control d-inline-block" id="username01">
+                    <span id="userIcon"></span>
+                    <div class="hint">帳號字數 3–6 字 <span id="userCount" class="count"></span></div>
+                </div>
+                <div class="mb-3">
+                    <label for="password01">密碼</label>
+                    <input type="password" class="form-control d-inline-block" id="password01">
+                    <span id="passIcon"></span>
+                    <div class="hint">密碼字數 4–8 字 <span id="passCount" class="count"></span></div>
+                </div>
+                <div class="mb-3">
+                    <label for="email01">Email</label>
+                    <input type="text" class="form-control d-inline-block" id="email01">
+                    <span id="emailIcon"></span>
+                    <div class="hint">電郵字數 8–10 字 <span id="emailCount" class="count"></span></div>
+                </div>
+                <button type="button" class="btn btn-primary" id="btn01">送出</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="bootstrap.bundle.min.js"></script>
+    <script src="jquery-4.0.0.js"></script>
+    <script>
+        // 三根旗子
+        let flagUser = false;
+        let flagPass = false;
+        let flagEmail = false;
+
+        // 帳號 blur 驗證 (3–6 字)
+        $("#username01").on("blur keyup", function () {
+            let val = $(this).val();
+            $("#userCount").text("目前字數：" + val.length);
+            if (val.length >=3 && val.length <= 6) {
+                $(this).removeClass("is-invalid").addClass("is-valid");
+                $("#userIcon").html("<span class='valid-feedback-icon'>✅ 輸入符合規定</span>");
+                flagUser = true;
+            } else {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+                $("#userIcon").html("<span class='invalid-feedback-icon'>⚠️ 輸入不符合規定，請修正</span>");
+                flagUser = false;
+            }
+        });
+
+        // 密碼 blur 驗證 (4–8 字)
+        $("#password01").on("blur keyup", function () {
+            let val = $(this).val();
+            $("#passCount").text("目前字數：" + val.length);
+            if (val.length >= 4 && val.length <= 8) {
+                $(this).removeClass("is-invalid").addClass("is-valid");
+                $("#passIcon").html("<span class='valid-feedback-icon'>✅ 輸入符合規定</span>");
+                flagPass = true;
+            } else {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+                $("#passIcon").html("<span class='invalid-feedback-icon'>⚠️ 輸入不符合規定，請修正</span>");
+                flagPass = false;
+            }
+        });
+
+        // Email blur 驗證 (8–10 字)
+        $("#email01").on("blur keyup", function () {
+            let val = $(this).val();
+            $("#emailCount").text("目前字數：" + val.length);
+            if (val.length >= 8 && val.length <= 10) {
+                $(this).removeClass("is-invalid").addClass("is-valid");
+                $("#emailIcon").html("<span class='valid-feedback-icon'>✅ 輸入符合規定</span>");
+                flagEmail = true;
+            } else {
+                $(this).removeClass("is-valid").addClass("is-invalid");
+                $("#emailIcon").html("<span class='invalid-feedback-icon'>⚠️ 輸入不符合規定，請修正</span>");
+                flagEmail = false;
+            }
+        });
+
+        // 送出按鈕
+        $("#btn01").on("click", function () {
+            if (flagUser && flagPass && flagEmail) {
+                console.log("送出資料：");
+                console.log("帳號：" + $("#username02").val());
+                console.log("密碼：" + $("#password02").val());
+                console.log("Email：" + $("#email02").val());
+                alert("表單送出成功！");
+            } else {
+                alert("請確認所有欄位都符合規定再送出！");
+            }
+        });
+    </script>
+</body>
+
+</html>
