@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今馬探索台灣旅遊網</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #0066cc, #00bfff);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #fff !important;
+        }
+
+        .hero {
+            background-image: url('Image/hero-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        footer {
+            background-color: #0066cc;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">今馬探索台灣旅遊網</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">首頁</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">熱門景點</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">行程規劃</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">聯絡我們</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首頁大圖 -->
+    <section class="hero">
+        <div class="text-center">
+            <h1>發現台灣之美</h1>
+            <p class="lead">專屬您的在地旅遊平台</p>
+            <a href="#" class="btn btn-warning btn-lg mt-3">立即預約行程</a>
+        </div>
+    </section>
+
+    <!-- 熱門景點 -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">熱門景點推薦</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="Image/237-1400x600.jpg" class="card-img-top" alt="日月潭">
+                    <div class="card-body">
+                        <h5 class="card-title">日月潭</h5>
+                        <p class="card-text">湖光山色交織的美景，適合划船、騎行與放鬆。</p>
+                        <a href="#" class="btn btn-primary">了解更多</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="Image/amritesh-chandan-VErc6_tx9n8-unsplash.jpg" class="card-img-top" alt="阿里山">
+                    <div class="card-body">
+                        <h5 class="card-title">阿里山</h5>
+                        <p class="card-text">觀賞日出、森林鐵道與櫻花的最佳去處。</p>
+                        <a href="#" class="btn btn-primary">了解更多</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="Image/ana-m-eYg1BXfToXc-unsplash.jpg" class="card-img-top" alt="九份老街">
+                    <div class="card-body">
+                        <h5 class="card-title">九份老街</h5>
+                        <p class="card-text">懷舊山城，茶館與夜景交織的浪漫氛圍。</p>
+                        <a href="#" class="btn btn-primary">了解更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 預約行程 -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">專屬行程規劃</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="Image/ankit-anand-Qlrl5piQ-us-unsplash.jpg" class="img-fluid rounded shadow" alt="行程規劃">
+            </div>
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <h3>量身打造您的旅遊計畫</h3>
+                <p>無論是親子同遊、情侶浪漫或團體出遊，我們提供最貼心的行程安排。</p>
+                <a href="#" class="btn btn-success btn-lg">開始規劃</a>
+            </div>
+        </div>
+    </div>
+    <!-- 線上預約表單 -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">線上預約行程</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form class="p-4 border rounded shadow-sm bg-white">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">姓名</label>
+                        <input type="text" class="form-control" id="name" placeholder="請輸入您的姓名" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">電子郵件</label>
+                        <input type="email" class="form-control" id="email" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">聯絡電話</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="0912-345-678" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="destination" class="form-label">旅遊目的地</label>
+                        <select class="form-select" id="destination" required>
+                            <option value="">請選擇</option>
+                            <option value="sunmoonlake">日月潭</option>
+                            <option value="alishan">阿里山</option>
+                            <option value="jiufen">九份老街</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">出發日期</label>
+                        <input type="date" class="form-control" id="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="people" class="form-label">人數</label>
+                        <input type="number" class="form-control" id="people" min="1" max="20" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="note" class="form-label">備註</label>
+                        <textarea class="form-control" id="note" rows="3" placeholder="特殊需求或備註"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">送出預約</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 顧客評價 -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">顧客評價</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <p class="card-text">「行程安排非常貼心，導遊專業又親切，讓我們一家人留下美好回憶！」</p>
+                        <h6 class="text-primary">— 王小姐 · 台北</h6>
+                        <div class="text-warning">
+                            ★★★★☆
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <p class="card-text">「第一次使用這個平台就愛上了！預約流程簡單，客服回覆迅速。」</p>
+                        <h6 class="text-primary">— 陳先生 · 高雄</h6>
+                        <div class="text-warning">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <p class="card-text">「九份老街的夜景超美，平台推薦的茶館真的很棒，下次還會再來！」</p>
+                        <h6 class="text-primary">— 李小姐 · 台中</h6>
+                        <div class="text-warning">
+                            ★★★★☆
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer>
+        <p>© 2026 探索台灣旅遊網 | 提供在地旅遊預約、導覽與行程規劃服務</p>
+    </footer>
+
+    <script src="bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
