@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <title>新井茶風格飲料訂購</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f5f2e7;
+      font-family: "Noto Sans TC", sans-serif;
+    }
+
+    .tea-header {
+      background: linear-gradient(135deg, #a8d5ba, #6b8e23);
+      color: #fff;
+      font-weight: 900;
+      border-radius: 12px;
+      padding: 20px;
+      text-shadow: 1px 1px 2px #4a5d23;
+    }
+
+    .tea-card {
+      background: #fff;
+      border: 2px solid #a8d5ba;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .tea-btn {
+      background-color: #6b8e23;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .tea-btn:hover {
+      background-color: #4a5d23;
+      color: #fff;
+    }
+
+    .fw-900 {
+      font-weight: 900;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    #order-details {
+      display: none;
+      /* 預設隱藏 */
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      display: block;
+      /* 讓按鈕成為區塊元素 */
+      margin: 20px auto;
+      /* 上下 20px，左右自動置中 */
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="json-server/db.json"></script>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="tea-header text-center mb-4 display-5">🍵 新井茶風格飲料訂購</div>
+
+        <div class="tea-card mb-4">
+          <!-- 訂購者名稱 -->
+          <div class="mb-3 form-floating">
+            <input type="text" class="form-control" id="buyerName" placeholder="字數2~5!" minlength="2" maxlength="5"
+              required>
+            <label for="buyerName">訂購者名稱(2~5字)</label>
+          </div>
+
+          <!-- 產品名稱 -->
+          <div class="mb-3">
+            <label class="form-label">產品名稱</label>
+            <input type="text" class="form-control" id="productName" placeholder="字數2~6!" list="p_list">
+            <datalist id="p_list">
+              <option value="紅茶20元"></option>
+              <option value="綠茶20元"></option>
+              <option value="珍珠奶茶30元"></option>
+              <option value="咖啡50元"></option>
+            </datalist>
+          </div>
+
+          <!-- 冰塊選擇 -->
+          <div class="mb-3">
+            <select class="form-select form-select-lg" id="iceOption">
+              <option value="" disabled selected>---請選擇冰塊---</option>
+              <option value="全冰">全冰</option>
+              <option value="少冰">少冰</option>
+              <option value="微冰">微冰</option>
+              <option value="去冰">去冰</option>
+            </select>
+          </div>
+
+          <!-- 單點配料 -->
+          <div class="mb-3">
+            <div class="h5 fw-900 text-success">單點配料:</div>
+            <div class="form-check"><input type="checkbox" class="form-check-input topping" value="粉圓"
+                data-price="10"><label class="form-check-label">粉圓 (+10元)</label></div>
+            <div class="form-check"><input type="checkbox" class="form-check-input topping" value="QQ"
+                data-price="15"><label class="form-check-label">QQ (+15元)</label></div>
+            <div class="form-check"><input type="checkbox" class="form-check-input topping" value="紅豆"
+                data-price="20"><label class="form-check-label">紅豆 (+20元)</label></div>
+            <div class="form-check"><input type="checkbox" class="form-check-input topping" value="綠豆"
+                data-price="20"><label class="form-check-label">綠豆 (+20元)</label></div>
+          </div>
+
+          <!-- 數量 -->
+          <div class="mb-3">
+            <label>數量: <span id="qtyDisplay" class="text-success h4 fw-900">1</span> 杯</label>
+            <input type="range" id="qtyRange" class="form-range" min="1" max="50" step="1" value="1">
+          </div>
+
+          <!-- 單價 -->
+          <div class="mb-3">
+            <label>單價: <span id="priceDisplay" class="text-success h4 fw-900">0</span> 元</label>
+          </div>
+
+          <!-- 總價 -->
+          <div class="h4 text-danger fw-900">總價: <span id="totalDisplay" class="h3 text-success">0</span> 元</div>
+
+          <!-- 備註 -->
+          <div class="mb-3">
+            <label class="form-label">備註(2-10字)</label>
+            <textarea id="note" class="form-control" minlength="2" maxlength="10"></textarea>
+          </div>
+        </div>
+
+        <!-- 訂購明細 -->
+        <div class="tea-card mt-5">
+          <div class="h3 text-warning fw-900 text-center mb-3">飲料訂購明細 (即時更新)</div>
+          <div class="border border-2 rounded-4 p-3" id="orderDetail">
+            <h4>尚未輸入資料</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="confirm-btn ">確認訂單</button>
+
+
+
+  <script>
+    const buyerName = document.getElementById("buyerName");
+    const productInput = document.getElementById("productName");
+    const iceOption = document.getElementById("iceOption");
+    const qtyRange = document.getElementById("qtyRange");
+    const qtyDisplay = document.getElementById("qtyDisplay");
+    const priceDisplay = document.getElementById("priceDisplay");
+    const totalDisplay = document.getElementById("totalDisplay");
+    const toppings = document.querySelectorAll(".topping");
+    const orderDetail = document.getElementById("orderDetail");
+
+    let basePrice = 0;
+
+    function parseProductPrice(value) {
+      const match = value.match(/(\d+)元/);
+      return match ? parseInt(match[1]) : 0;
+    }
+
+    function updateDetail() {
+      const buyer = buyerName.value;
+      const product = productInput.value;
+      const ice = iceOption.value;
+      const qty = parseInt(qtyRange.value);
+      let toppingTotal = 0;
+      let toppingList = [];
+      toppings.forEach(t => {
+        if (t.checked) {
+          toppingTotal += parseInt(t.dataset.price);
+          toppingList.push(`${t.value}(+${t.dataset.price}元)`);
+        }
+      });
+      const total = (basePrice + toppingTotal) * qty;
+
+      qtyDisplay.textContent = qty;
+      priceDisplay.textContent = basePrice;
+      totalDisplay.textContent = total;
+
+      orderDetail.innerHTML = `
+        <h4>訂購者名稱: ${buyer || "未填寫"}</h4>
+        <h4>產品名稱: ${product || "未選擇"}</h4>
+        <h4>冰塊: ${ice || "未選擇"}</h4>
+        <h4>配料: ${toppingList.length > 0 ? toppingList.join("、") : "無"}</h4>
+        <h4>數量: ${qty} 杯</h4>
+        <h4>單價: ${basePrice} 元</h4>
+        <h4>配料加價: ${toppingTotal} 元</h4>
+        <h4>總價: ${total} 元</h4>
+      `;
+    }
+
+
+    // flag 監聽
+    buyerName.addEventListener("input", () => {
+      console.log("flag: 訂購者名稱 ->", buyerName.value);
+      updateDetail();
+    });
+
+    productInput.addEventListener("input", () => {
+      console.log("flag: 產品名稱 ->", productInput.value);
+      basePrice = parseProductPrice(productInput.value);
+      updateDetail();
+    });
+
+    iceOption.addEventListener("change", () => {
+      console.log("flag: 冰塊選擇 ->", iceOption.value);
+      updateDetail();
+    });
+
+    qtyRange.addEventListener("input", updateDetail);
+    toppings.forEach(t => t.addEventListener("change", updateDetail));
+
+    // 初始化
+    updateDetail();
+
+    const confirmBtn = document.getElementById("confirm-btn");
+    confirmBtn.addEventListener("click", () => {
+      console.log("使用者已確認訂單！");
+
+      // 這裡可以加上後續動作，例如送出訂單
+      $("#confirm-btn").on("click", function () {
+        // 準備要送出的資料
+        const orderData = {
+          drinks: [
+
+            { name: "珍珠奶茶", qty: 3 },
+            { name: "紅茶", qty: 1 },
+            { name: "綠茶", qty: 2 },
+            { name: "綠茶", qty: 2 }
+          ]
+        };
+
+        // 在 console 印出 JSON 字串
+        console.log(JSON.stringify(orderData));
+
+        // 使用 jQuery Ajax 送出
+        $.ajax({
+          url: "http://localhost:3000",       // 你的後端 API 路徑
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(orderData),
+          success: function (response) {
+            console.log("伺服器回應：", response);
+          },
+          error: function (xhr, status, error) {
+            console.error("發生錯誤：", error);
+          }
+        });
+      });
+
+
+    });
+  </script>
+</body>
+
+</html>
