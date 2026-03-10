@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>產品列表</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Noto Sans TC', sans-serif;
+            background: #f0f2f5;
+            padding: 32px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            color: #f5a623;
+        }
+
+        .table-wrap {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        thead th {
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: #fafbff;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 13px 18px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: #e6f4ea;
+            color: #2e7d32;
+        }
+
+        .badge-inactive {
+            background: #fce8e6;
+            color: #c62828;
+        }
+
+        .btn-update {
+            background: #f5a623;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-right: 6px;
+        }
+
+        .btn-update:hover {
+            background: #e09510;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: #fff;
+            color: #e53935;
+            border: 1.5px solid #e53935;
+            border-radius: 8px;
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #fce8e6;
+        }
+
+        /* SweetAlert2 custom overrides */
+        .swal2-title {
+            font-size: 19px !important;
+            font-weight: 700 !important;
+            color: #1a1a2e !important;
+        }
+
+        .swal2-popup {
+            border-radius: 16px !important;
+            padding: 28px !important;
+        }
+
+        .swal2-header {
+            background: #f5a623;
+            border-radius: 12px 12px 0 0;
+            padding: 16px 24px !important;
+            margin: -28px -28px 20px -28px !important;
+        }
+
+        .swal2-title {
+            color: #fff !important;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            background: #f9f9f9;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #f5a623;
+            background: #fff;
+        }
+
+        .form-group input[readonly] {
+            background: #efefef;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        /* custom 3-button row */
+        .swal-btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .swal-btn {
+            padding: 9px 22px;
+            border-radius: 9px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .swal-btn-cancel {
+            background: #eee;
+            color: #555;
+        }
+
+        .swal-btn-cancel:hover {
+            background: #ddd;
+        }
+
+        .swal-btn-reset {
+            background: #fff3e0;
+            color: #e65100;
+            border: 1.5px solid #ffcc80;
+        }
+
+        .swal-btn-reset:hover {
+            background: #ffe0b2;
+        }
+
+        .swal-btn-confirm {
+            background: #f5a623;
+            color: #fff;
+        }
+
+        .swal-btn-confirm:hover {
+            background: #e09510;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2><i class="fas fa-box-open "></i> 顯示產品列表</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>編號</th>
+                    <th>訂購者名稱</th>
+                    <th>品名</th>
+                    <th>數量</th>
+                    <th>日期</th>
+                    <th>狀態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody"></tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // ── 產品資料 ──────────────────────────────────────────────
+        const products = [
+            { id: '6o57', buyer: 'admin', name: '蛋糕', qty: 10, date: '2024-03-10', active: true },
+            { id: '4322', buyer: 'alice', name: '餅乾', qty: 5, date: '2024-03-11', active: true },
+            { id: '79f8', buyer: 'bob', name: '麵包', qty: 3, date: '2024-03-12', active: false },
+            { id: '6d37', buyer: 'carol', name: '布丁', qty: 8, date: '2024-03-13', active: true },
+            { id: 'f31b', buyer: 'admin', name: '馬卡龍', qty: 2, date: '2024-03-14', active: false },
+            { id: '5555', buyer: 'admin', name: '蛋糕', qty: 10, date: '2024-03-14', active: true },
+            { id: '8813', buyer: 'alice', name: '餅乾', qty: 5, date: '2024-03-14', active: true },
+            { id: '77d8', buyer: 'bob', name: '麵包', qty: 3, date: '2024-03-14', active: false },
+            { id: '6d88', buyer: 'carol', name: '布丁', qty: 8, date: '2024-03-15', active: true },
+            { id: 'f59f', buyer: 'admin', name: '馬卡龍', qty: 2, date: '2024-03-15', active: false },
+        ];
+
+        // ── 渲染表格 ──────────────────────────────────────────────
+        function renderTable() {
+            const tbody = document.getElementById('productTableBody');
+            tbody.innerHTML = products.map(p => `
+      <tr>
+        <td><code>${p.id}</code></td>
+        <td>${p.buyer}</td>
+        <td>${p.name}</td>
+        <td>${p.qty}</td>
+        <td>${p.date}</td>
+        <td><span class="badge ${p.active ? 'badge-active' : 'badge-inactive'}">${p.active ? '上架' : '下架'}</span></td>
+        <td>
+          <button class="btn-update" onclick="openUpdateModal('${p.id}')">更新</button>
+          <button class="btn-delete" onclick="deleteProduct('${p.id}')">刪除</button>
+        </td>
+      </tr>
+    `).join('');
+        }
+
+        // ── 開啟更新 Modal（SweetAlert2 + 三個按鈕）──────────────
+        function openUpdateModal(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+
+            Swal.fire({
+                title: '產品更新',
+                html: `
+        <div class="form-group">
+          <label>訂購者名稱</label>
+          <input id="swal-buyer" value="${p.buyer}" readonly />
+        </div>
+        <div class="form-group">
+          <label>品名</label>
+          <input id="swal-name" value="${p.name}" />
+        </div>
+        <div class="form-group">
+          <label>數量（數量 1~10）</label>
+          <input id="swal-qty" type="number" min="1" max="10" value="${p.qty}" />
+        </div>
+
+        <!-- 三個自訂按鈕 -->
+        <div class="swal-btn-row">
+          <button class="swal-btn swal-btn-cancel"  id="btnCancel">取消</button>
+          <button class="swal-btn swal-btn-reset"   id="btnReset">重置</button>
+          <button class="swal-btn swal-btn-confirm" id="btnConfirm">確認更新</button>
+        </div>
+      `,
+                showConfirmButton: false,   // 隱藏預設按鈕，改用自訂
+                showCloseButton: true,
+                width: 480,
+                customClass: {
+                    popup: 'swal2-popup',
+                    header: 'swal2-header',
+                    title: 'swal2-title',
+                },
+                didOpen: () => {
+                    // ── 監聽：取消 ────────────────────────────────────
+                    document.getElementById('btnCancel').addEventListener('click', () => {
+                        console.log('[Modal] 按下取消，關閉視窗');
+                        Swal.fire({
+                            icon: 'info',
+                            title: '已取消',
+                            text: '未做任何變更。',
+                            timer: 1200,
+                            showConfirmButton: false,
+                        });
+                    });
+
+                    // ── 監聽：重置 ────────────────────────────────────
+                    document.getElementById('btnReset').addEventListener('click', () => {
+                        document.getElementById('swal-name').value = p.name;
+                        document.getElementById('swal-qty').value = p.qty;
+                        console.log('[Modal] 按下重置，欄位已還原');
+                        Swal.showValidationMessage('已重置為原始值 ✔');
+                        setTimeout(() => Swal.resetValidationMessage(), 1500);
+                    });
+
+                    // ── 監聽：確認更新 ────────────────────────────────
+                    document.getElementById('btnConfirm').addEventListener('click', () => {
+                        const newName = document.getElementById('swal-name').value.trim();
+                        const newQty = parseInt(document.getElementById('swal-qty').value, 10);
+
+                        // 驗證
+                        if (!newName) {
+                            Swal.showValidationMessage('品名不可為空！');
+                            return;
+                        }
+                        if (isNaN(newQty) || newQty < 1 || newQty > 10) {
+                            Swal.showValidationMessage('數量必須介於 1 ~ 10！');
+                            return;
+                        }
+
+                        // 更新資料
+                        p.name = newName;
+                        p.qty = newQty;
+                        renderTable();
+
+                        console.log('[Modal] 確認更新 →', { id: p.id, name: p.name, qty: p.qty });
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '更新成功！',
+                            html: `<b>${newName}</b> 數量已更新為 <b>${newQty}</b>`,
+                            timer: 1800,
+                            showConfirmButton: false,
+                        });
+                    });
+                }
+            });
+        }
+
+        // ── 刪除（示範） ──────────────────────────────────────────
+        function deleteProduct(id) {
+            Swal.fire({
+                icon: 'warning',
+                title: '確定要刪除？',
+                text: '此操作無法復原。',
+                showCancelButton: true,
+                confirmButtonText: '刪除',
+                cancelButtonText: '取消',
+                confirmButtonColor: '#e53935',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    const idx = products.findIndex(x => x.id === id);
+                    if (idx !== -1) products.splice(idx, 1);
+                    renderTable();
+                    Swal.fire({ icon: 'success', title: '已刪除', timer: 1200, showConfirmButton: false });
+                }
+            });
+        }
+
+        renderTable();
+    </script>
+</body>
+
+</html>
