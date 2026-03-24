@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅館民宿探索</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+    :root {
+      --ink:    #1c1c1e;
+      --smoke:  #f2f2f0;
+      --sand:   #e8e0d4;
+      --terra:  #b87333;
+      --moss:   #4a7c59;
+      --pale:   #faf9f7;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(0,0,0,.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--pale);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, #1c2b1f 0%, #2d4a38 50%, #3d5c48 100%);
+      padding: 3rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-label {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #7fc49e;
+      margin-bottom: .75rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: .5rem;
+    }
+    .hero p {
+      color: rgba(255,255,255,.55);
+      font-size: .9rem;
+      font-weight: 300;
+    }
+
+    /* ── FILTER PANEL ── */
+    .filter-panel {
+      max-width: 680px;
+      margin: -2.5rem auto 2.5rem;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 48px rgba(0,0,0,.14);
+      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-end;
+      position: relative;
+      z-index: 10;
+    }
+    .filter-group { flex: 1; display: flex; flex-direction: column; gap: .4rem; }
+    .filter-group label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--moss);
+    }
+    .filter-group select {
+      font-family: 'Noto Sans TC', sans-serif;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 2px solid var(--sand);
+      border-radius: 10px;
+      padding: .65rem 2.5rem .65rem 1rem;
+      font-size: .9rem;
+      color: var(--ink);
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a7c59' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+        right .9rem center / 16px no-repeat,
+        #fff;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+      width: 100%;
+    }
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--moss);
+      box-shadow: 0 0 0 4px rgba(74,124,89,.12);
+    }
+    .filter-group select:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .filter-hint {
+      font-size: .7rem;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      max-width: 1200px;
+      margin: 0 auto 1.5rem;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .stats-count {
+      font-size: .85rem;
+      color: #888;
+    }
+    .stats-count strong { color: var(--moss); font-weight: 700; }
+
+    /* ── LOADING ── */
+    .loading-state {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: #aaa;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--sand);
+      border-top-color: var(--moss);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── CARD GRID ── */
+    .cards-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ── HOTEL CARD ── */
+    .hotel-card {
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, box-shadow .25s ease;
+      animation: fadeUp .4s ease both;
+    }
+    .hotel-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.16);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 1.2rem 1.3rem 1.4rem;
+    }
+    .card-location {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      margin-bottom: .5rem;
+    }
+    .badge-city {
+      background: var(--moss);
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 700;
+      padding: .2em .65em;
+      border-radius: 20px;
+      letter-spacing: .04em;
+    }
+    .badge-town {
+      font-size: .75rem;
+      color: #aaa;
+    }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+      margin-bottom: .35rem;
+    }
+    .card-org {
+      font-size: .75rem;
+      color: #aaa;
+      margin-bottom: .7rem;
+    }
+    .card-divider {
+      border: none;
+      border-top: 1px solid var(--sand);
+      margin: .7rem 0;
+    }
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .meta-row {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .8rem;
+      color: #666;
+    }
+    .meta-row .icon { flex-shrink: 0; color: var(--moss); }
+    .card-price {
+      margin-top: .8rem;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--terra);
+    }
+    .card-price .label {
+      font-size: .7rem;
+      font-weight: 400;
+      color: #aaa;
+      margin-right: .3rem;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 2rem;
+      color: #bbb;
+    }
+    .empty-state .emoji { font-size: 3rem; display: block; margin-bottom: 1rem; }
+
+    /* ── PROGRESS ── */
+    .progress-bar-wrap {
+      max-width: 480px;
+      margin: 1rem auto 0;
+    }
+    .pbar {
+      height: 3px;
+      border-radius: 3px;
+      background: rgba(255,255,255,.15);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .pbar-fill {
+      height: 100%;
+      background: #7fc49e;
+      border-radius: 3px;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:.4}50%{opacity:1} }
+
+    @media (max-width: 600px) {
+      .filter-panel {
+        flex-direction: column;
+        margin: -1.5rem 1rem 2rem;
+        padding: 1.2rem 1.2rem;
+      }
+      .cards-grid { padding: 0 1rem 3rem; }
+      .stats-bar { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <p class="hero-label">Taiwan Hotel & B&B Explorer</p>
+  <h1>探索台灣旅宿</h1>
+  <p>從縣市出發，找到你的理想住所</p>
+
+  <div class="progress-bar-wrap" id="progressWrap">
+    <div style="font-size:.75rem;color:rgba(255,255,255,.5)" id="progressLabel">⏳ 載入地區與旅館資料中…</div>
+    <div class="pbar"><div class="pbar-fill"></div></div>
+  </div>
+</div>
+
+<!-- Filter Panel -->
+<div class="filter-panel" id="filterPanel">
+  <div class="filter-group">
+    <label>縣市</label>
+    <select id="citySelect" disabled>
+      <option value="">🏙️ 請選擇縣市</option>
+    </select>
+    <span class="filter-hint" id="cityHint">資料載入中…</span>
+  </div>
+  <div class="filter-group">
+    <label>鄉鎮市區</label>
+    <select id="townSelect" disabled>
+      <option value="">🗺️ 請選擇鄉鎮市區</option>
+    </select>
+    <span class="filter-hint" id="townHint">請先選擇縣市</span>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stats-count" id="statsMsg">—</div>
+  <div style="font-size:.75rem;color:#ccc" id="dropInfo"></div>
+</div>
+
+<!-- Cards Grid -->
+<div class="cards-grid" id="cardsGrid">
+  <div class="loading-state" style="grid-column:1/-1">
+    <div class="spinner"></div>
+    <div>資料載入中，請稍候…</div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+let ALL_DATA     = [];
+let LOCATION_MAP = {};
+
+/* ── 地區備用資料 ── */
+const MOCK_LOCATION_DATA = [
+  { CityName:'臺北市', AreaList:[{AreaName:'中正區'},{AreaName:'大同區'},{AreaName:'中山區'},{AreaName:'松山區'},{AreaName:'大安區'},{AreaName:'萬華區'},{AreaName:'信義區'},{AreaName:'士林區'},{AreaName:'北投區'},{AreaName:'內湖區'},{AreaName:'南港區'},{AreaName:'文山區'}] },
+  { CityName:'新北市', AreaList:[{AreaName:'板橋區'},{AreaName:'三重區'},{AreaName:'中和區'},{AreaName:'永和區'},{AreaName:'新莊區'},{AreaName:'新店區'},{AreaName:'樹林區'},{AreaName:'鶯歌區'},{AreaName:'三峽區'},{AreaName:'淡水區'},{AreaName:'汐止區'},{AreaName:'瑞芳區'}] },
+  { CityName:'桃園市', AreaList:[{AreaName:'桃園區'},{AreaName:'中壢區'},{AreaName:'大溪區'},{AreaName:'楊梅區'},{AreaName:'蘆竹區'},{AreaName:'龜山區'}] },
+  { CityName:'臺中市', AreaList:[{AreaName:'中區'},{AreaName:'東區'},{AreaName:'南區'},{AreaName:'西區'},{AreaName:'北區'},{AreaName:'北屯區'},{AreaName:'西屯區'},{AreaName:'南屯區'},{AreaName:'太平區'},{AreaName:'大里區'},{AreaName:'霧峰區'},{AreaName:'烏日區'}] },
+  { CityName:'臺南市', AreaList:[{AreaName:'中西區'},{AreaName:'東區'},{AreaName:'南區'},{AreaName:'北區'},{AreaName:'安平區'},{AreaName:'安南區'},{AreaName:'永康區'},{AreaName:'歸仁區'}] },
+  { CityName:'高雄市', AreaList:[{AreaName:'楠梓區'},{AreaName:'左營區'},{AreaName:'鼓山區'},{AreaName:'三民區'},{AreaName:'鹽埕區'},{AreaName:'前金區'},{AreaName:'苓雅區'},{AreaName:'前鎮區'},{AreaName:'旗津區'},{AreaName:'小港區'}] },
+  { CityName:'南投縣', AreaList:[{AreaName:'南投市'},{AreaName:'埔里鎮'},{AreaName:'草屯鎮'},{AreaName:'竹山鎮'},{AreaName:'集集鎮'},{AreaName:'名間鄉'},{AreaName:'鹿谷鄉'},{AreaName:'中寮鄉'},{AreaName:'魚池鄉'},{AreaName:'國姓鄉'},{AreaName:'水里鄉'},{AreaName:'信義鄉'},{AreaName:'仁愛鄉'}] },
+  { CityName:'花蓮縣', AreaList:[{AreaName:'花蓮市'},{AreaName:'鳳林鎮'},{AreaName:'玉里鎮'},{AreaName:'新城鄉'},{AreaName:'吉安鄉'},{AreaName:'壽豐鄉'},{AreaName:'光復鄉'},{AreaName:'豐濱鄉'},{AreaName:'瑞穗鄉'},{AreaName:'富里鄉'},{AreaName:'秀林鄉'},{AreaName:'萬榮鄉'},{AreaName:'卓溪鄉'}] },
+  { CityName:'臺東縣', AreaList:[{AreaName:'臺東市'},{AreaName:'成功鎮'},{AreaName:'關山鎮'},{AreaName:'卑南鄉'},{AreaName:'鹿野鄉'},{AreaName:'池上鄉'},{AreaName:'東河鄉'},{AreaName:'長濱鄉'},{AreaName:'太麻里鄉'},{AreaName:'大武鄉'},{AreaName:'綠島鄉'},{AreaName:'蘭嶼鄉'},{AreaName:'延平鄉'},{AreaName:'海端鄉'}] },
+  { CityName:'屏東縣', AreaList:[{AreaName:'屏東市'},{AreaName:'潮州鎮'},{AreaName:'東港鎮'},{AreaName:'恆春鎮'},{AreaName:'萬丹鄉'},{AreaName:'長治鄉'},{AreaName:'麟洛鄉'},{AreaName:'九如鄉'}] },
+  { CityName:'宜蘭縣', AreaList:[{AreaName:'宜蘭市'},{AreaName:'羅東鎮'},{AreaName:'蘇澳鎮'},{AreaName:'頭城鎮'},{AreaName:'礁溪鄉'},{AreaName:'壯圍鄉'},{AreaName:'員山鄉'},{AreaName:'冬山鄉'},{AreaName:'五結鄉'},{AreaName:'三星鄉'},{AreaName:'大同鄉'},{AreaName:'南澳鄉'}] },
+  { CityName:'苗栗縣', AreaList:[{AreaName:'苗栗市'},{AreaName:'頭份市'},{AreaName:'竹南鎮'},{AreaName:'後龍鎮'},{AreaName:'通霄鎮'},{AreaName:'苑裡鎮'},{AreaName:'造橋鄉'}] },
+  { CityName:'彰化縣', AreaList:[{AreaName:'彰化市'},{AreaName:'鹿港鎮'},{AreaName:'和美鎮'},{AreaName:'線西鄉'},{AreaName:'福興鄉'}] },
+  { CityName:'嘉義市', AreaList:[{AreaName:'東區'},{AreaName:'西區'}] },
+  { CityName:'嘉義縣', AreaList:[{AreaName:'太保市'},{AreaName:'朴子市'},{AreaName:'布袋鎮'},{AreaName:'大林鎮'},{AreaName:'民雄鄉'},{AreaName:'溪口鄉'},{AreaName:'新港鄉'},{AreaName:'六腳鄉'},{AreaName:'東石鄉'},{AreaName:'義竹鄉'},{AreaName:'鹿草鄉'},{AreaName:'水上鄉'},{AreaName:'中埔鄉'},{AreaName:'竹崎鄉'},{AreaName:'梅山鄉'},{AreaName:'番路鄉'},{AreaName:'大埔鄉'},{AreaName:'阿里山鄉'}] },
+  { CityName:'澎湖縣', AreaList:[{AreaName:'馬公市'},{AreaName:'湖西鄉'},{AreaName:'白沙鄉'},{AreaName:'西嶼鄉'},{AreaName:'望安鄉'},{AreaName:'七美鄉'}] },
+  { CityName:'金門縣', AreaList:[{AreaName:'金城鎮'},{AreaName:'金湖鎮'},{AreaName:'金沙鎮'},{AreaName:'金寧鄉'},{AreaName:'烈嶼鄉'},{AreaName:'烏坵鄉'}] },
+  { CityName:'連江縣', AreaList:[{AreaName:'南竿鄉'},{AreaName:'北竿鄉'},{AreaName:'莒光鄉'},{AreaName:'東引鄉'}] },
+  { CityName:'基隆市', AreaList:[{AreaName:'仁愛區'},{AreaName:'信義區'},{AreaName:'中正區'},{AreaName:'中山區'},{AreaName:'安樂區'},{AreaName:'暖暖區'},{AreaName:'七堵區'}] },
+  { CityName:'新竹市', AreaList:[{AreaName:'東區'},{AreaName:'北區'},{AreaName:'香山區'}] },
+  { CityName:'新竹縣', AreaList:[{AreaName:'竹北市'},{AreaName:'竹東鎮'},{AreaName:'新埔鎮'},{AreaName:'關西鎮'},{AreaName:'湖口鄉'},{AreaName:'新豐鄉'},{AreaName:'芎林鄉'},{AreaName:'橫山鄉'},{AreaName:'北埔鄉'},{AreaName:'寶山鄉'},{AreaName:'峨眉鄉'},{AreaName:'尖石鄉'},{AreaName:'五峰鄉'}] },
+  { CityName:'雲林縣', AreaList:[{AreaName:'斗六市'},{AreaName:'斗南鎮'},{AreaName:'虎尾鎮'},{AreaName:'西螺鎮'},{AreaName:'土庫鎮'},{AreaName:'北港鎮'},{AreaName:'麥寮鄉'}] }
+];
+
+/* ── 旅館備用資料（含圖片）── */
+const MOCK_HOTEL_DATA = [
+  { HotelID:'M001', HotelName:'山嵐朝霧民宿', HotelLicenseNumber:'南投縣民宿358號',
+    PostalAddress:{ City:'南投縣', Town:'埔里鎮', StreetAddress:'水頭路1號' },
+    Telephones:[{Tel:'(049)2927101'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel001/600/450'}],
+    Organizations:[{Name:'山嵐朝霧民宿', Class:'Operator'}],
+    LowestPrice:2200, CeilingPrice:3600 },
+  { HotelID:'M002', HotelName:'凱旋新宿商旅', HotelLicenseNumber:'臺東縣旅館103號',
+    PostalAddress:{ City:'臺東縣', Town:'臺東市', StreetAddress:'復興路243號' },
+    Telephones:[{Tel:'(089)311777'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel002/600/450'}],
+    Organizations:[{Name:'凱旋新宿商旅', Class:'Operator'}],
+    LowestPrice:1800, CeilingPrice:4500 },
+  { HotelID:'M003', HotelName:'花蓮海岸民宿',
+    PostalAddress:{ City:'花蓮縣', Town:'花蓮市', StreetAddress:'美崙一路10號' },
+    Telephones:[{Tel:'(038)571234'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel003/600/450'}],
+    Organizations:[{Name:'花蓮海岸民宿', Class:'Operator'}],
+    LowestPrice:3000, CeilingPrice:5000 },
+  { HotelID:'M004', HotelName:'礁溪溫泉旅館',
+    PostalAddress:{ City:'宜蘭縣', Town:'礁溪鄉', StreetAddress:'礁溪路5段10號' },
+    Telephones:[{Tel:'(03)9881111'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel004/600/450'}],
+    Organizations:[{Name:'礁溪溫泉旅館', Class:'Operator'}],
+    LowestPrice:3500, CeilingPrice:6000 },
+  { HotelID:'M005', HotelName:'墾丁海景別墅',
+    PostalAddress:{ City:'屏東縣', Town:'恆春鎮', StreetAddress:'墾丁路100號' },
+    Telephones:[{Tel:'(08)8861234'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel005/600/450'}],
+    Organizations:[{Name:'墾丁海景別墅', Class:'Operator'}],
+    LowestPrice:4500, CeilingPrice:9000 },
+  { HotelID:'M006', HotelName:'清境高山民宿',
+    PostalAddress:{ City:'南投縣', Town:'仁愛鄉', StreetAddress:'青青草原路55號' },
+    Telephones:[{Tel:'(049)2803456'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel006/600/450'}],
+    Organizations:[{Name:'清境高山民宿', Class:'Operator'}],
+    LowestPrice:2800, CeilingPrice:4800 },
+  { HotelID:'M007', HotelName:'九份山城旅館',
+    PostalAddress:{ City:'新北市', Town:'瑞芳區', StreetAddress:'基山街22號' },
+    Telephones:[{Tel:'(02)24966789'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel007/600/450'}],
+    Organizations:[{Name:'九份山城旅館', Class:'Operator'}],
+    LowestPrice:2000, CeilingPrice:3800 },
+  { HotelID:'M008', HotelName:'澎湖藍天民宿',
+    PostalAddress:{ City:'澎湖縣', Town:'馬公市', StreetAddress:'中正路8號' },
+    Telephones:[{Tel:'(06)9277890'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel008/600/450'}],
+    Organizations:[{Name:'澎湖藍天民宿', Class:'Operator'}],
+    LowestPrice:1600, CeilingPrice:3200 },
+  { HotelID:'M009', HotelName:'金門風獅爺客棧',
+    PostalAddress:{ City:'金門縣', Town:'金城鎮', StreetAddress:'莒光路12號' },
+    Telephones:[{Tel:'(082)325678'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel009/600/450'}],
+    Organizations:[{Name:'金門風獅爺客棧', Class:'Operator'}],
+    LowestPrice:2400, CeilingPrice:4200 },
+  { HotelID:'M010', HotelName:'日月潭湖畔旅館',
+    PostalAddress:{ City:'南投縣', Town:'魚池鄉', StreetAddress:'日月村水社巷5號' },
+    Telephones:[{Tel:'(049)2855234'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel010/600/450'}],
+    Organizations:[{Name:'日月潭湖畔旅館', Class:'Operator'}],
+    LowestPrice:3800, CeilingPrice:7200 },
+  { HotelID:'M011', HotelName:'阿里山雲霧山莊',
+    PostalAddress:{ City:'嘉義縣', Town:'阿里山鄉', StreetAddress:'中正村東光17號' },
+    Telephones:[{Tel:'(05)2679111'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel011/600/450'}],
+    Organizations:[{Name:'阿里山雲霧山莊', Class:'Operator'}],
+    LowestPrice:2600, CeilingPrice:5500 },
+  { HotelID:'M012', HotelName:'淡水河岸旅店',
+    PostalAddress:{ City:'新北市', Town:'淡水區', StreetAddress:'中正路166號' },
+    Telephones:[{Tel:'(02)26230000'}],
+    Images:[{URL:'https://picsum.photos/seed/hotel012/600/450'}],
+    Organizations:[{Name:'淡水河岸旅店', Class:'Operator'}],
+    LowestPrice:1900, CeilingPrice:3400 },
+  // 無圖片的資料（應被清洗掉）
+  { HotelID:'M013', HotelName:'無圖示範旅館',
+    PostalAddress:{ City:'臺北市', Town:'中正區', StreetAddress:'無圖路1號' },
+    Telephones:[], Images:[], Organizations:[], LowestPrice:0, CeilingPrice:0 },
+  { HotelID:'M014', HotelName:null,
+    PostalAddress:{ City:'高雄市', Town:'三民區', StreetAddress:'' },
+    Telephones:[], Images:[], Organizations:[], LowestPrice:0, CeilingPrice:0 },
+];
+
+/* ══════════════════════════════════════════════
+   工具函式
+══════════════════════════════════════════════ */
+function norm(v) { return v === null || v === undefined ? '' : String(v).trim(); }
+function extractTel(item) {
+  if (!Array.isArray(item.Telephones) || !item.Telephones.length) return '';
+  return norm(item.Telephones[0].Tel).replace(/^TEL[:\s]*/i,'').trim();
+}
+function extractImage(item) {
+  if (!Array.isArray(item.Images) || !item.Images.length) return '';
+  const u = norm(item.Images[0].URL || item.Images[0].Url || item.Images[0].url || '');
+  return u.startsWith('http') ? u : '';
+}
+function extractOrgName(item) {
+  if (!Array.isArray(item.Organizations) || !item.Organizations.length) return '';
+  const op = item.Organizations.find(o => o.Class === 'Operator') || item.Organizations[0];
+  return norm(op.Name);
+}
+function formatPrice(low, ceil) {
+  const l = parseInt(low)||0, c = parseInt(ceil)||0;
+  if (!l && !c) return '';
+  if (l === c) return `NT$ ${l.toLocaleString()}`;
+  return `NT$ ${l.toLocaleString()} ~ ${c.toLocaleString()}`;
+}
+
+/* ══════════════════════════════════════════════
+   清洗（只保留有圖片 + 有名稱）
+══════════════════════════════════════════════ */
+function processData(rawList) {
+  const seenIDs = new Set();
+  const dropped = [];
+  const cleaned = [];
+
+  rawList.forEach(item => {
+    const name   = norm(item.HotelName);
+    const picURL = extractImage(item);
+    const id     = norm(item.HotelID) || '—';
+    const pa     = item.PostalAddress || {};
+
+    if (!name) {
+      dropped.push({ id, reason: '名稱空白' }); return;
+    }
+    if (!picURL) {
+      dropped.push({ id, name, reason: '無圖片（已排除）' }); return;
+    }
+    if (seenIDs.has(id)) {
+      dropped.push({ id, name, reason: '重複 ID' }); return;
+    }
+    seenIDs.add(id);
+
+    cleaned.push({
+      id, name,
+      city   : norm(pa.City),
+      town   : norm(pa.Town),
+      address: norm(pa.StreetAddress),
+      tel    : extractTel(item),
+      picURL,
+      orgName: extractOrgName(item),
+      license: norm(item.HotelLicenseNumber),
+      price  : formatPrice(item.LowestPrice, item.CeilingPrice)
+    });
+  });
+
+  ALL_DATA = cleaned;
+  console.log(`✅ 清洗完成：原始 ${rawList.length} 筆，有效（含圖）${cleaned.length} 筆，排除 ${dropped.length} 筆`);
+  if (dropped.length) console.table(dropped);
+  return { cleaned, dropped };
+}
+
+/* ══════════════════════════════════════════════
+   建立地區地圖
+══════════════════════════════════════════════ */
+function buildLocationMap(data) {
+  LOCATION_MAP = {};
+  if (!Array.isArray(data)) return;
+  data.forEach(city => {
+    const name = city.CityName || city.name || '';
+    if (!name) return;
+    const areas = city.AreaList || city.districts || [];
+    LOCATION_MAP[name] = areas.map(a => a.AreaName || a.name || '').filter(Boolean).sort((a,b)=>a.localeCompare(b,'zh-TW'));
+  });
+}
+
+function buildCityDropdown() {
+  const sel = document.getElementById('citySelect');
+  sel.innerHTML = '<option value="">🏙️ 請選擇縣市</option>';
+  Object.keys(LOCATION_MAP).sort((a,b)=>a.localeCompare(b,'zh-TW')).forEach(c => {
+    sel.innerHTML += `<option value="${c}">${c}</option>`;
+  });
+  sel.disabled = false;
+  document.getElementById('cityHint').textContent = `共 ${Object.keys(LOCATION_MAP).length} 個縣市`;
+}
+
+/* ══════════════════════════════════════════════
+   篩選 & 渲染 Cards
+══════════════════════════════════════════════ */
+function applyFilter() {
+  const city = document.getElementById('citySelect').value;
+  const town = document.getElementById('townSelect').value;
+
+  const result = ALL_DATA.filter(h =>
+    (!city || h.city === city) &&
+    (!town || h.town === town)
+  );
+
+  renderCards(result);
+}
+
+function renderCards(data) {
+  const grid = document.getElementById('cardsGrid');
+  const statsMsg = document.getElementById('statsMsg');
+
+  if (data.length === 0) {
+    grid.innerHTML = `<div class="empty-state">
+      <span class="emoji">🏝️</span>
+      <div>此條件下暫無旅宿資料</div>
+    </div>`;
+    statsMsg.innerHTML = '沒有符合條件的旅宿';
+    return;
+  }
+
+  statsMsg.innerHTML = `找到 <strong>${data.length}</strong> 間旅宿`;
+
+  grid.innerHTML = data.map((h, i) => `
+    <div class="hotel-card" style="animation-delay:${Math.min(i*0.05,0.5)}s">
+      <img class="card-image"
+           src="${h.picURL}"
+           alt="${h.name}"
+           onerror="this.src='https://picsum.photos/seed/fallback${i}/600/450'">
+      <div class="card-body">
+        <div class="card-location">
+          ${h.city ? `<span class="badge-city">${h.city}</span>` : ''}
+          ${h.town ? `<span class="badge-town">${h.town}</span>` : ''}
+        </div>
+        <div class="card-name">${h.name}</div>
+        ${h.orgName && h.orgName !== h.name ? `<div class="card-org">🏢 ${h.orgName}</div>` : ''}
+        <hr class="card-divider">
+        <div class="card-meta">
+          ${h.address ? `<div class="meta-row"><span class="icon">📍</span><span>${h.address}</span></div>` : ''}
+          ${h.tel     ? `<div class="meta-row"><span class="icon">📞</span><span>${h.tel}</span></div>` : ''}
+          ${h.license ? `<div class="meta-row"><span class="icon">📋</span><span>${h.license}</span></div>` : ''}
+        </div>
+        ${h.price ? `<div class="card-price"><span class="label">房價</span>${h.price}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ══════════════════════════════════════════════
+   縣市切換 → 更新鄉鎮下拉
+══════════════════════════════════════════════ */
+function onCityChange() {
+  const city  = document.getElementById('citySelect').value;
+  const tSel  = document.getElementById('townSelect');
+  const tHint = document.getElementById('townHint');
+
+  tSel.innerHTML = '<option value="">🗺️ 全部鄉鎮市區</option>';
+
+  if (!city) {
+    tSel.disabled = true;
+    tHint.textContent = '請先選擇縣市';
+    applyFilter();
+    return;
+  }
+
+  let towns = LOCATION_MAP[city] || [];
+  if (!towns.length) {
+    const fb = new Set(ALL_DATA.filter(h=>h.city===city&&h.town).map(h=>h.town));
+    towns = [...fb].sort((a,b)=>a.localeCompare(b,'zh-TW'));
+  }
+
+  towns.forEach(t => tSel.innerHTML += `<option value="${t}">${t}</option>`);
+  tSel.disabled = towns.length === 0;
+  tHint.textContent = towns.length ? `共 ${towns.length} 個鄉鎮市區` : '此縣市無資料';
+
+  applyFilter();
+}
+
+/* ══════════════════════════════════════════════
+   載入流程
+══════════════════════════════════════════════ */
+function hideProgress() {
+  const wrap = document.getElementById('progressWrap');
+  wrap.style.transition = 'opacity .5s';
+  wrap.style.opacity = '0';
+  setTimeout(() => wrap.style.display = 'none', 500);
+}
+
+function startApp(locationData, hotelData) {
+  buildLocationMap(locationData);
+  buildCityDropdown();
+
+  const raw =
+    (hotelData.Hotels)         ? hotelData.Hotels        :
+    (Array.isArray(hotelData)) ? hotelData                :
+    (hotelData.data)           ? hotelData.data           :
+    (hotelData.result?.records)? hotelData.result.records : [];
+
+  const { cleaned, dropped } = processData(raw.length ? raw : hotelData);
+  ALL_DATA = cleaned;
+
+  const dropInfo = document.getElementById('dropInfo');
+  dropInfo.textContent = dropped.length
+    ? `已過濾 ${dropped.length} 筆（無圖片或無效資料）`
+    : '';
+
+  // 事件綁定
+  document.getElementById('citySelect').addEventListener('change', onCityChange);
+  document.getElementById('townSelect').addEventListener('change', applyFilter);
+
+  hideProgress();
+  renderCards(cleaned);
+}
+
+/* ── 嘗試讀 JSON，失敗用備用資料 ── */
+window.addEventListener('DOMContentLoaded', () => {
+  let locationData = null;
+  let hotelData    = null;
+
+  function tryStart() {
+    if (locationData !== null && hotelData !== null) {
+      startApp(locationData, hotelData);
+    }
+  }
+
+  // 地區 JSON
+  fetch('CityCountyData.json')
+    .then(r => r.json())
+    .then(d => { locationData = d; tryStart(); })
+    .catch(() => { locationData = MOCK_LOCATION_DATA; tryStart(); });
+
+  // 旅館 JSON
+  fetch('HotelList.json')
+    .then(r => r.json())
+    .then(d => { hotelData = d; tryStart(); })
+    .catch(() => { hotelData = MOCK_HOTEL_DATA; tryStart(); });
+});
+</script>
+</body>
+</html>
