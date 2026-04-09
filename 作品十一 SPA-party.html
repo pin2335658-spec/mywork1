@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>派對公司 - SPA 官方網站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Serif+TC:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C96A;
+      --gold-pale: #F5E8C0;
+      --black: #11a69a;
+      --dark: #e76a6a;
+      --dark2: #1a0469;
+      --dark3: #453a0e;
+      --white: #FAF8F2;
+      --gray: #888;
+      --accent: #B8380D;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Serif TC', serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: all 0.15s ease;
+      opacity: 0.6;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
+      transition: background 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.97);
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .logo span { color: var(--white); }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none; align-items: center;
+    }
+    .nav-links a {
+      color: rgba(250,248,242,0.75);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 300;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold) !important;
+      padding: 8px 22px;
+      cursor: none;
+      transition: all 0.3s !important;
+    }
+    .nav-btn:hover {
+      background: var(--gold) !important;
+      color: var(--black) !important;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 30%, rgba(184,56,13,0.06) 0%, transparent 50%),
+        linear-gradient(160deg, #0A0A0A 0%, #111 40%, #0D0A06 100%);
+    }
+    .hero-lines {
+      position: absolute; inset: 0; overflow: hidden;
+      opacity: 0.12;
+    }
+    .hero-lines::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: 30%;
+      width: 1px; height: 200%;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      animation: lineFloat 8s ease-in-out infinite;
+    }
+    .hero-lines::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: 65%;
+      width: 1px; height: 200%;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      animation: lineFloat 8s ease-in-out infinite 2s;
+    }
+    @keyframes lineFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(40px); }
+    }
+    .hero-content {
+      text-align: center;
+      position: relative; z-index: 1;
+      animation: fadeUp 1.2s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 900;
+      line-height: 0.9;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: rgba(250,248,242,0.5);
+      letter-spacing: 0.25em;
+      margin-bottom: 48px;
+      font-style: italic;
+    }
+    .hero-cta {
+      display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 16px 44px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: all 0.3s;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(250,248,242,0.35);
+      padding: 16px 44px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: all 0.3s;
+      font-weight: 300;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: rgba(250,248,242,0.4); font-size: 0.7rem; letter-spacing: 0.25em;
+      text-transform: uppercase;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+    .hero-scroll i { font-size: 1rem; }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 100px 60px; }
+    .section-tag {
+      font-size: 0.68rem; letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px; font-weight: 300;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700; line-height: 1.1; color: var(--white);
+      margin-bottom: 20px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-desc {
+      color: rgba(250,248,242,0.55); font-size: 0.95rem;
+      line-height: 1.85; max-width: 580px; font-weight: 300;
+    }
+    .divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      margin: 28px 0;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--dark); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px; margin-top: 64px;
+    }
+    .service-card {
+      background: var(--dark2);
+      padding: 48px 36px;
+      position: relative; overflow: hidden;
+      transition: all 0.4s;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .service-card:hover { transform: translateY(-4px); }
+    .service-card:hover::before { opacity: 1; }
+    .service-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.4s;
+    }
+    .service-card:hover::after { width: 100%; }
+    .service-icon {
+      font-size: 2.2rem; color: var(--gold);
+      margin-bottom: 24px; display: block;
+    }
+    .service-num {
+      position: absolute; top: 20px; right: 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem; color: rgba(201,168,76,0.06);
+      line-height: 1;
+    }
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700; color: var(--white);
+      margin-bottom: 14px;
+    }
+    .service-desc {
+      color: rgba(250,248,242,0.5); font-size: 0.88rem;
+      line-height: 1.8; font-weight: 300;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--black);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-visual {
+      position: relative; aspect-ratio: 4/5;
+    }
+    .about-img-main {
+      width: 75%; height: 80%;
+      background: linear-gradient(135deg, #1a1208 0%, #2a1e08 50%, #1a1208 100%);
+      position: absolute; top: 0; right: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .about-img-main i {
+      font-size: 5rem; color: rgba(201,168,76,0.3);
+    }
+    .about-img-accent {
+      width: 50%; height: 45%;
+      background: linear-gradient(135deg, #0d0a03 0%, #1a1208 100%);
+      border: 1px solid rgba(201,168,76,0.2);
+      position: absolute; bottom: 0; left: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-img-accent i { font-size: 3rem; color: var(--gold); opacity: 0.6; }
+    .about-frame {
+      position: absolute; top: -10px; left: -10px;
+      width: 77%; height: 82%;
+      border: 1px solid rgba(201,168,76,0.15);
+      pointer-events: none;
+    }
+    .stats-row {
+      display: flex; gap: 40px; margin-top: 44px;
+    }
+    .stat { border-left: 2px solid var(--gold); padding-left: 20px; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem; color: var(--gold); line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem; color: rgba(250,248,242,0.45);
+      letter-spacing: 0.15em; text-transform: uppercase; font-weight: 300;
+    }
+
+    /* ── GALLERY / EVENTS ── */
+    #events { background: var(--dark); }
+    .events-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 52px;
+    }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 3px;
+    }
+    .event-item {
+      background: var(--dark3);
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .event-item:nth-child(1) { grid-column: span 7; grid-row: span 2; aspect-ratio: auto; min-height: 400px; }
+    .event-item:nth-child(2) { grid-column: span 5; min-height: 196px; }
+    .event-item:nth-child(3) { grid-column: span 5; min-height: 196px; }
+    .event-item:nth-child(4) { grid-column: span 4; min-height: 220px; }
+    .event-item:nth-child(5) { grid-column: span 4; min-height: 220px; }
+    .event-item:nth-child(6) { grid-column: span 4; min-height: 220px; }
+    .event-inner {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.6s ease;
+      position: relative;
+      min-height: inherit;
+    }
+    .event-item:hover .event-inner { transform: scale(1.04); }
+    .event-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+    }
+    .event-bg-1 { background: linear-gradient(135deg, #1a1208 0%, #3d2b0a 100%); }
+    .event-bg-2 { background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 100%); }
+    .event-bg-3 { background: linear-gradient(135deg, #1a0a0a 0%, #2e1515 100%); }
+    .event-bg-4 { background: linear-gradient(135deg, #0a1a0a 0%, #152e15 100%); }
+    .event-bg-5 { background: linear-gradient(135deg, #0a0d1a 0%, #15152e 100%); }
+    .event-bg-6 { background: linear-gradient(135deg, #1a0a14 0%, #2e1525 100%); }
+    .event-icon {
+      font-size: 3.5rem; color: rgba(201,168,76,0.25);
+      position: relative; z-index: 1;
+    }
+    .event-item:nth-child(1) .event-icon { font-size: 6rem; }
+    .event-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      z-index: 2;
+      opacity: 0; transition: opacity 0.4s;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 24px;
+    }
+    .event-item:hover .event-overlay { opacity: 1; }
+    .event-tag {
+      font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 6px;
+    }
+    .event-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--white);
+    }
+
+    /* ── PACKAGES ── */
+    #packages { background: var(--black); }
+    .packages-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; margin-top: 60px;
+    }
+    .pkg-card {
+      background: var(--dark2); padding: 48px 36px;
+      position: relative; overflow: hidden;
+      transition: all 0.4s;
+    }
+    .pkg-card.featured {
+      background: var(--gold);
+    }
+    .pkg-card.featured * { color: var(--black) !important; }
+    .pkg-badge {
+      position: absolute; top: 20px; right: 20px;
+      background: var(--accent); color: var(--white);
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; padding: 5px 12px;
+    }
+    .pkg-tier {
+      font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px; font-weight: 300;
+    }
+    .pkg-card.featured .pkg-tier { color: rgba(0,0,0,0.6); }
+    .pkg-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 700; color: var(--white);
+      margin-bottom: 24px;
+    }
+    .pkg-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem; color: var(--gold); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pkg-period {
+      font-size: 0.75rem; color: rgba(250,248,242,0.45);
+      letter-spacing: 0.15em; margin-bottom: 36px;
+    }
+    .pkg-features { list-style: none; margin-bottom: 40px; }
+    .pkg-features li {
+      padding: 10px 0; border-bottom: 1px solid rgba(250,248,242,0.08);
+      font-size: 0.88rem; color: rgba(250,248,242,0.65);
+      display: flex; align-items: center; gap: 12px; font-weight: 300;
+    }
+    .pkg-card.featured .pkg-features li {
+      border-color: rgba(0,0,0,0.1);
+    }
+    .pkg-features li i { color: var(--gold); font-size: 0.75rem; }
+    .pkg-card.featured .pkg-features li i { color: rgba(0,0,0,0.5); }
+    .pkg-btn {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: all 0.3s;
+    }
+    .pkg-btn:hover {
+      background: var(--gold); color: var(--black);
+    }
+    .pkg-card.featured .pkg-btn {
+      background: var(--black); border-color: var(--black); color: var(--white);
+    }
+    .pkg-card.featured .pkg-btn:hover { background: var(--dark2); }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: var(--dark);
+      text-align: center;
+    }
+    .testimonials-wrapper {
+      max-width: 800px; margin: 60px auto 0;
+      position: relative;
+    }
+    .testimonial {
+      display: none;
+      animation: fadeIn 0.6s ease;
+    }
+    .testimonial.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .testimonial-quote {
+      font-size: 4rem; color: var(--gold); line-height: 1;
+      margin-bottom: 20px; font-family: 'Playfair Display', serif;
+    }
+    .testimonial-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-style: italic; color: rgba(250,248,242,0.85);
+      line-height: 1.7; margin-bottom: 32px;
+    }
+    .testimonial-author {
+      font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); font-weight: 300;
+    }
+    .stars { color: var(--gold); margin-bottom: 16px; font-size: 0.9rem; }
+    .testimonial-dots {
+      display: flex; justify-content: center; gap: 10px; margin-top: 40px;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(201,168,76,0.3); cursor: none;
+      transition: all 0.3s;
+    }
+    .dot.active { background: var(--gold); width: 24px; border-radius: 3px; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--black);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .contact-info { padding-top: 8px; }
+    .contact-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      margin-bottom: 32px;
+    }
+    .contact-icon {
+      width: 46px; height: 46px;
+      border: 1px solid rgba(201,168,76,0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1rem; flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .contact-item:hover .contact-icon {
+      background: var(--gold); color: var(--black);
+    }
+    .contact-label {
+      font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 4px; font-weight: 300;
+    }
+    .contact-value {
+      color: rgba(250,248,242,0.75); font-size: 0.95rem; font-weight: 300;
+    }
+    .social-links {
+      display: flex; gap: 14px; margin-top: 44px;
+    }
+    .social-link {
+      width: 42px; height: 42px;
+      border: 1px solid rgba(250,248,242,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(250,248,242,0.5); font-size: 0.95rem;
+      text-decoration: none; transition: all 0.3s; cursor: none;
+    }
+    .social-link:hover {
+      border-color: var(--gold); color: var(--gold);
+    }
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-group label {
+      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); font-weight: 300;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--dark2);
+      border: 1px solid rgba(250,248,242,0.1);
+      color: var(--white);
+      padding: 14px 18px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.88rem; font-weight: 300;
+      outline: none;
+      transition: border-color 0.3s;
+      appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+    }
+    .form-group textarea { resize: none; height: 130px; }
+    .form-group select option { background: var(--dark2); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(201,168,76,0.15);
+      padding: 48px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: 0.15em; color: var(--gold);
+    }
+    .footer-copy {
+      font-size: 0.78rem; color: rgba(250,248,242,0.3);
+      letter-spacing: 0.1em; font-weight: 300;
+    }
+    .footer-links {
+      display: flex; gap: 28px;
+    }
+    .footer-links a {
+      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(250,248,242,0.35); text-decoration: none;
+      transition: color 0.3s; font-weight: 300;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--dark2);
+      width: 820px; max-width: 94vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      border-top: 3px solid var(--gold);
+      animation: modalIn 0.4s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-header {
+      background: linear-gradient(135deg, var(--gold) 0%, #b8920a 100%);
+      padding: 22px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700; color: var(--black);
+    }
+    .modal-close {
+      background: none; border: none;
+      font-size: 1.3rem; color: var(--black);
+      cursor: none; opacity: 0.7; transition: opacity 0.2s;
+      line-height: 1;
+    }
+    .modal-close:hover { opacity: 1; }
+    .modal-body {
+      padding: 36px 32px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    /* Terms side */
+    .modal-terms-col { }
+    .modal-terms-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700; color: var(--white);
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .modal-terms-title i { color: var(--gold); font-size: 1rem; }
+    .terms-text {
+      color: rgba(250,248,242,0.5);
+      font-size: 0.85rem; line-height: 1.9;
+      font-weight: 300;
+    }
+    .terms-text p + p { margin-top: 12px; }
+    /* Form side */
+    .modal-fields { display: flex; flex-direction: column; gap: 16px; }
+    .modal-field { display: flex; flex-direction: column; gap: 6px; }
+    .modal-field label {
+      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); font-weight: 300;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modal-field label i { font-size: 0.75rem; }
+    .modal-field input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(250,248,242,0.1);
+      border-bottom: 1px solid rgba(201,168,76,0.3);
+      color: var(--white);
+      padding: 12px 16px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem; font-weight: 300;
+      outline: none; transition: border-color 0.3s;
+    }
+    .modal-field input:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.04);
+    }
+    .modal-field input::placeholder { color: rgba(250,248,242,0.2); }
+    .modal-agree {
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-top: 4px;
+    }
+    .modal-agree input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--gold);
+      margin-top: 2px; flex-shrink: 0;
+    }
+    .modal-agree label {
+      font-size: 0.82rem; color: rgba(250,248,242,0.5);
+      font-weight: 300; line-height: 1.5; cursor: none;
+    }
+    .modal-agree label a {
+      color: var(--gold); text-decoration: underline;
+    }
+    .modal-footer {
+      padding: 20px 32px 28px;
+      display: flex; justify-content: flex-end; gap: 14px;
+      border-top: 1px solid rgba(250,248,242,0.06);
+    }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid rgba(250,248,242,0.2);
+      color: rgba(250,248,242,0.5);
+      padding: 12px 32px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem; letter-spacing: 0.15em;
+      cursor: none; transition: all 0.3s;
+    }
+    .btn-cancel:hover { border-color: rgba(250,248,242,0.4); color: var(--white); }
+    .btn-confirm {
+      background: linear-gradient(135deg, var(--gold) 0%, #b8920a 100%);
+      border: none; color: var(--black);
+      padding: 12px 36px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.82rem; letter-spacing: 0.15em;
+      cursor: none; transition: all 0.3s; font-weight: 500;
+    }
+    .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); opacity: 0.5; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      section { padding: 70px 24px; }
+      #about, #contact { grid-template-columns: 1fr; gap: 48px; }
+      .about-visual { display: none; }
+      .packages-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
+      .modal-body { grid-template-columns: 1fr; }
+      .modal { width: 94vw; }
+      #events .events-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .events-grid { grid-template-columns: 1fr 1fr; }
+      .event-item { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 160px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo">SPA<span>派對</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">服務項目</a></li>
+    <li><a href="#about">關於我們</a></li>
+    <li><a href="#events">精彩活動</a></li>
+    <li><a href="#packages">方案費用</a></li>
+    <li><a href="#contact">聯絡我們</a></li>
+    <li><a href="#" class="nav-btn" id="registerBtn">會員註冊</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <p class="hero-tag"><i class="fa-solid fa-star"></i> &nbsp; 頂級派對策劃公司 &nbsp; <i class="fa-solid fa-star"></i></p>
+    <h1 class="hero-title"><em>SPA</em><br>派對公司</h1>
+    <p class="hero-subtitle">The Art of Celebration</p>
+    <div class="hero-cta">
+      <a href="#packages" class="btn-primary"><i class="fa-solid fa-champagne-glasses"></i> &nbsp; 探索方案</a>
+      <a href="#" class="btn-outline" id="heroRegisterBtn"><i class="fa-regular fa-user"></i> &nbsp; 成為會員</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="section-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> &nbsp; 我們的服務</p>
+  <h2 class="section-title">為您打造<em>完美</em>時刻</h2>
+  <div class="divider"></div>
+  <p class="section-desc">從私人派對到企業活動，我們以無與倫比的品味與專業，為每一個重要時刻注入靈魂。</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <i class="fa-solid fa-champagne-glasses service-icon"></i>
+      <h3 class="service-title">私人派對策劃</h3>
+      <p class="service-desc">生日、週年紀念、求婚……我們將您最珍貴的記憶，化為令人難忘的感官盛宴。</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <i class="fa-solid fa-building service-icon"></i>
+      <h3 class="service-title">企業活動規劃</h3>
+      <p class="service-desc">年終晚會、產品發表、員工激勵活動——專業呈現，完美執行，超越期望。</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <i class="fa-solid fa-spa service-icon"></i>
+      <h3 class="service-title">SPA 主題體驗</h3>
+      <p class="service-desc">融合頂級 SPA 療程與派對文化，讓賓客在沉浸式放鬆中感受奢華歡愉。</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <i class="fa-solid fa-music service-icon"></i>
+      <h3 class="service-title">現場音樂演出</h3>
+      <p class="service-desc">精選頂尖現場樂團、DJ 表演，為您的活動注入無可複製的音樂靈魂。</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">05</span>
+      <i class="fa-solid fa-utensils service-icon"></i>
+      <h3 class="service-title">頂級宴席餐飲</h3>
+      <p class="service-desc">與米其林餐廳合作，量身定制每一道料理，讓味覺成為最深刻的記憶。</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">06</span>
+      <i class="fa-solid fa-camera service-icon"></i>
+      <h3 class="service-title">攝影錄影記錄</h3>
+      <p class="service-desc">專業攝影團隊全程紀錄，以電影級視角保存您每一個璀璨瞬間。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual">
+    <div class="about-frame"></div>
+    <div class="about-img-main"><i class="fa-solid fa-glass-water-droplet"></i></div>
+    <div class="about-img-accent"><i class="fa-solid fa-star"></i></div>
+  </div>
+  <div class="about-text">
+    <p class="section-tag"><i class="fa-solid fa-leaf"></i> &nbsp; 關於我們</p>
+    <h2 class="section-title">十年淬煉<br><em>奢華</em>美學</h2>
+    <div class="divider"></div>
+    <p class="section-desc">SPA 派對公司成立於 2014 年，以「將平凡化為非凡」為核心使命。我們融合東方美學與現代奢華，為台灣頂尖企業與名流提供無可取代的派對體驗。</p>
+    <br>
+    <p class="section-desc">每一場活動，我們都以藝術家的眼光、工程師的嚴謹，以及主人翁的熱情，全力以赴。</p>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">成功活動</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">客戶滿意度</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">年資深經驗</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS GALLERY -->
+<section id="events">
+  <div class="events-header">
+    <div>
+      <p class="section-tag"><i class="fa-solid fa-images"></i> &nbsp; 精彩活動</p>
+      <h2 class="section-title">每場派對<br>都是<em>傑作</em></h2>
+    </div>
+    <a href="#contact" class="btn-outline" style="white-space:nowrap">預約諮詢 &nbsp;<i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="events-grid">
+    <div class="event-item">
+      <div class="event-inner">
+        <div class="event-bg event-bg-1"></div>
+        <i class="fa-solid fa-champagne-glasses event-icon"></i>
+        <div class="event-overlay">
+          <span class="event-tag">VIP 私人派對</span>
+          <span class="event-name">璀璨金秋夜宴</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-item">
+      <div class="event-inner">
+        <div class="event-bg event-bg-2"></div>
+        <i class="fa-solid fa-building event-icon"></i>
+        <div class="event-overlay">
+          <span class="event-tag">企業活動</span>
+          <span class="event-name">科技峰會慶典</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-item">
+      <div class="event-inner">
+        <div class="event-bg event-bg-3"></div>
+        <i class="fa-solid fa-spa event-icon"></i>
+        <div class="event-overlay">
+          <span class="event-tag">SPA 主題</span>
+          <span class="event-name">玫瑰療癒之夜</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-item">
+      <div class="event-inner">
+        <div class="event-bg event-bg-4"></div>
+        <i class="fa-solid fa-music event-icon"></i>
+        <div class="event-overlay">
+          <span class="event-tag">音樂派對</span>
+          <span class="event-name">爵士融合之夜</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-item">
+      <div class="event-inner">
+        <div class="event-bg event-bg-5"></div>
+        <i class="fa-solid fa-utensils event-icon"></i>
+        <div class="event-overlay">
+          <span class="event-tag">頂級宴席</span>
+          <span class="event-name">星空饗宴晚會</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-item">
+      <div class="event-inner">
+        <div class="event-bg event-bg-6"></div>
+        <i class="fa-solid fa-heart event-icon"></i>
+        <div class="event-overlay">
+          <span class="event-tag">婚禮策劃</span>
+          <span class="event-name">永恆誓約之夜</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div style="text-align:center">
+    <p class="section-tag"><i class="fa-solid fa-crown"></i> &nbsp; 方案費用</p>
+    <h2 class="section-title">選擇您的<em>專屬</em>方案</h2>
+    <div class="divider" style="margin: 20px auto;"></div>
+  </div>
+  <div class="packages-grid">
+    <div class="pkg-card">
+      <p class="pkg-tier">Entry</p>
+      <h3 class="pkg-name">輕奢方案</h3>
+      <div class="pkg-price">NT$28,000</div>
+      <p class="pkg-period">起 / 每場活動</p>
+      <ul class="pkg-features">
+        <li><i class="fa-solid fa-check"></i> 專業活動統籌人員 × 1</li>
+        <li><i class="fa-solid fa-check"></i> 場地佈置（3 小時）</li>
+        <li><i class="fa-solid fa-check"></i> 基礎燈光音響設備</li>
+        <li><i class="fa-solid fa-check"></i> 精選餐飲套餐</li>
+        <li><i class="fa-solid fa-check"></i> 活動後紀念相冊</li>
+      </ul>
+      <button class="pkg-btn" onclick="document.getElementById('registerModal').classList.add('open')">立即預約</button>
+    </div>
+    <div class="pkg-card featured">
+      <div class="pkg-badge">最受歡迎</div>
+      <p class="pkg-tier">Premium</p>
+      <h3 class="pkg-name">頂級方案</h3>
+      <div class="pkg-price">NT$68,000</div>
+      <p class="pkg-period">起 / 每場活動</p>
+      <ul class="pkg-features">
+        <li><i class="fa-solid fa-check"></i> 資深統籌總監 × 1 + 助理 × 2</li>
+        <li><i class="fa-solid fa-check"></i> 全天場地佈置與管理</li>
+        <li><i class="fa-solid fa-check"></i> 專業燈光音響特效</li>
+        <li><i class="fa-solid fa-check"></i> 米其林合作主廚宴席</li>
+        <li><i class="fa-solid fa-check"></i> SPA 主題體驗套組</li>
+        <li><i class="fa-solid fa-check"></i> 全程攝影錄影</li>
+      </ul>
+      <button class="pkg-btn" onclick="document.getElementById('registerModal').classList.add('open')">立即預約</button>
+    </div>
+    <div class="pkg-card">
+      <p class="pkg-tier">Exclusive</p>
+      <h3 class="pkg-name">尊爵方案</h3>
+      <div class="pkg-price">NT$168,000</div>
+      <p class="pkg-period">起 / 每場活動</p>
+      <ul class="pkg-features">
+        <li><i class="fa-solid fa-check"></i> 專屬企劃團隊 × 5</li>
+        <li><i class="fa-solid fa-check"></i> 頂級豪華場地租借</li>
+        <li><i class="fa-solid fa-check"></i> 現場知名藝人表演</li>
+        <li><i class="fa-solid fa-check"></i> 全套奢華 SPA 體驗</li>
+        <li><i class="fa-solid fa-check"></i> 私人攝影師 + 剪輯影片</li>
+        <li><i class="fa-solid fa-check"></i> 客製禮品贈送服務</li>
+      </ul>
+      <button class="pkg-btn" onclick="document.getElementById('registerModal').classList.add('open')">立即預約</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <p class="section-tag"><i class="fa-solid fa-quote-left"></i> &nbsp; 客戶心聲</p>
+  <h2 class="section-title">真實<em>評語</em></h2>
+  <div class="testimonials-wrapper">
+    <div class="testimonial active">
+      <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">SPA 派對公司將我的婚禮變成了夢境。每一個細節都無懈可擊，所有賓客至今仍津津樂道。這是我人生中最美好的夜晚。</p>
+      <p class="testimonial-author">— 林小姐，新娘客戶</p>
+    </div>
+    <div class="testimonial">
+      <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">我們公司的年終晚會由他們承辦，從現場佈置到餐飲水準，完全超越我們的預期。員工反應是公司史上最棒的年終派對！</p>
+      <p class="testimonial-author">— 陳總監，科技企業客戶</p>
+    </div>
+    <div class="testimonial">
+      <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">SPA 主題派對是我生日最特別的禮物。他們讓每位朋友都感受到被寵愛，那種尊榮感是其他公司無法給予的。</p>
+      <p class="testimonial-author">— Vivian，VIP 會員</p>
+    </div>
+    <div class="testimonial-dots">
+      <div class="dot active" onclick="goToSlide(0)"></div>
+      <div class="dot" onclick="goToSlide(1)"></div>
+      <div class="dot" onclick="goToSlide(2)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-tag"><i class="fa-solid fa-envelope"></i> &nbsp; 聯絡我們</p>
+    <h2 class="section-title">開始策劃您的<em>完美</em>派對</h2>
+    <div class="divider"></div>
+    <p class="section-desc">無論您有任何想法或需求，我們的專業團隊隨時恭候為您量身打造獨一無二的體驗。</p>
+    <br>
+    <div class="contact-item">
+      <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+      <div>
+        <div class="contact-label">地址</div>
+        <div class="contact-value">台中市西屯區文心路二段 xxx 號 18F</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+      <div>
+        <div class="contact-label">電話</div>
+        <div class="contact-value">04-8888-8888</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">hello@spa-party.com.tw</div>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+      <div>
+        <div class="contact-label">服務時間</div>
+        <div class="contact-value">週一至週六 12:00 – 20:00</div>
+      </div>
+    </div>
+    <div class="social-links">
+      <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" class="social-link"><i class="fa-brands fa-line"></i></a>
+      <a href="#" class="social-link"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+  </div>
+  <form class="contact-form" onsubmit="return false;">
+    <div class="form-row">
+      <div class="form-group">
+        <label><i class="fa-solid fa-user"></i> 姓名</label>
+        <input type="text" placeholder="您的大名">
+      </div>
+      <div class="form-group">
+        <label><i class="fa-solid fa-phone"></i> 聯絡電話</label>
+        <input type="tel" placeholder="09XX-XXX-XXX">
+      </div>
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-envelope"></i> 電子郵件</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-list"></i> 活動類型</label>
+      <select>
+        <option value="" disabled selected>請選擇活動類型</option>
+        <option>私人派對</option>
+        <option>企業活動</option>
+        <option>婚禮策劃</option>
+        <option>SPA 主題派對</option>
+        <option>其他</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-message"></i> 活動需求說明</label>
+      <textarea placeholder="請描述您的活動構想、預計人數、日期等…"></textarea>
+    </div>
+    <button type="button" class="btn-primary" style="width:100%;padding:16px;font-size:0.9rem;letter-spacing:0.2em">
+      <i class="fa-solid fa-paper-plane"></i> &nbsp; 送出諮詢
+    </button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SPA派對公司</div>
+  <div class="footer-copy">© 2025 SPA 派對公司. All Rights Reserved.</div>
+  <div class="footer-links">
+    <a href="#">隱私政策</a>
+    <a href="#">服務條款</a>
+    <a href="#" onclick="document.getElementById('registerModal').classList.add('open');return false;">會員中心</a>
+  </div>
+</footer>
+
+<!-- ── MODAL: 會員註冊 ── -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title"><i class="fa-solid fa-user-plus" style="margin-right:10px"></i>會員註冊</h2>
+      <button class="modal-close" onclick="document.getElementById('registerModal').classList.remove('open')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- Terms -->
+      <div class="modal-terms-col">
+        <h3 class="modal-terms-title"><i class="fa-solid fa-scroll"></i> 會員條款</h3>
+        <div class="terms-text">
+          <p>歡迎加入 SPA 派對公司會員計畫。成為會員即表示您同意以下條款與條件，請仔細閱讀。</p>
+          <p>一、本公司依據相關法令規定保護您的個人資料，所蒐集之資訊僅用於會員服務及行銷通知目的。</p>
+          <p>二、會員享有優先預約服務、專屬折扣優惠、生日禮遇，及不定期會員專屬活動邀請。</p>
+          <p>三、會員帳號不得轉讓或借用他人，如有違規本公司得逕行停權。</p>
+          <p>四、本公司保留隨時修改條款之權利，修改後將公告於官網，繼續使用即視為同意。</p>
+        </div>
+      </div>
+      <!-- Fields -->
+      <div class="modal-fields">
+        <div class="modal-field">
+          <label><i class="fa-solid fa-user"></i> 帳號</label>
+          <input type="text" placeholder="請輸入帳號（6–20 字元）">
+        </div>
+        <div class="modal-field">
+          <label><i class="fa-solid fa-lock"></i> 密碼</label>
+          <input type="password" placeholder="請輸入密碼（8 字元以上）">
+        </div>
+        <div class="modal-field">
+          <label><i class="fa-solid fa-lock"></i> 確認密碼</label>
+          <input type="password" placeholder="請再次輸入密碼">
+        </div>
+        <div class="modal-field">
+          <label><i class="fa-solid fa-envelope"></i> Email</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="modal-agree">
+          <input type="checkbox" id="agreeCheck">
+          <label for="agreeCheck">我已閱讀並同意 <a href="#">會員條款</a> 及 <a href="#">隱私政策</a></label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('registerModal').classList.remove('open')">
+        <i class="fa-solid fa-xmark"></i> &nbsp; 取消
+      </button>
+      <button class="btn-confirm">
+        <i class="fa-solid fa-check"></i> &nbsp; 確認註冊
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 80);
+  });
+
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Register modal triggers
+  document.getElementById('registerBtn').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('registerModal').classList.add('open');
+  });
+  document.getElementById('heroRegisterBtn').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('registerModal').classList.add('open');
+  });
+
+  // Close modal on overlay click
+  document.getElementById('registerModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+  });
+
+  // Testimonials
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.testimonial');
+  const dots = document.querySelectorAll('.dot');
+  function goToSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = n;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+  }
+  setInterval(() => goToSlide((currentSlide + 1) % slides.length), 5000);
+</script>
+</body>
+</html>
