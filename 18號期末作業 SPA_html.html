@@ -1,0 +1,3416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼎極酒窖 | DINGJI WINE CELLAR</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500;700&family=Josefin+Sans:wght@200;300;400;600&display=swap"
+    rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- WOW.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+  <style>
+    /* ============================================================
+   CSS VARIABLES & RESET
+   ============================================================ */
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E8D5A3;
+      --gold-dark: #8B6914;
+      --burgundy: #5C1A2E;
+      --burgundy-mid: #7B2340;
+      --burgundy-lt: #A3324F;
+      --champagne: #F5E6C8;
+      --champagne2: #EDD9A3;
+      --obsidian: #0A0608;
+      --deep-wine: #1A0A0F;
+      --ink: #12080D;
+      --cream: #FAF5EC;
+      --text-light: #F0E8D8;
+      --text-muted: #B89E7A;
+      --glass: rgba(201, 169, 110, 0.08);
+      --glass-border: rgba(201, 169, 110, 0.25);
+      --shadow-wine: 0 20px 60px rgba(92, 26, 46, 0.4);
+      --shadow-gold: 0 10px 40px rgba(201, 169, 110, 0.3);
+      --r: 12px;
+      --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--obsidian);
+      color: var(--text-light);
+      font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--deep-wine);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 3px;
+    }
+
+    /* ── Selection ── */
+    ::selection {
+      background: var(--burgundy-mid);
+      color: var(--champagne);
+    }
+
+    /* ── Utility ── */
+    .gold {
+      color: var(--gold);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+      color: var(--champagne);
+    }
+
+    .section-subtitle {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.5rem auto;
+    }
+
+    .divider-left {
+      margin: 1.5rem 0;
+    }
+
+    .btn-gold {
+      display: inline-block;
+      padding: 0.85rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      background: transparent;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-100%);
+      transition: var(--transition);
+      z-index: 0;
+    }
+
+    .btn-gold:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-gold:hover {
+      color: var(--obsidian);
+    }
+
+    .btn-gold span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ============================================================
+   SECTION 01 — Social Bar
+   ============================================================ */
+    #social-bar {
+      background: var(--ink);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0.6rem 0;
+      position: relative;
+      z-index: 100;
+    }
+
+    .social-bar-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+    }
+
+    .social-links a {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: var(--transition);
+      backdrop-filter: blur(4px);
+    }
+
+    .social-links a:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--obsidian);
+      transform: translateY(-2px);
+    }
+
+    .social-tagline {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+   SECTION 02 — Navigation
+   ============================================================ */
+    #navbar {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: rgba(10, 6, 8, 0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 2rem;
+      transition: var(--transition);
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-icon {
+      font-size: 1.8rem;
+      color: var(--gold);
+      filter: drop-shadow(0 0 8px rgba(201, 169, 110, 0.6));
+    }
+
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav-logo-cn {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--champagne);
+      letter-spacing: 0.15em;
+    }
+
+    .nav-logo-en {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      padding: 0.45rem 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      transition: var(--transition);
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      right: 50%;
+      height: 1px;
+      background: var(--gold);
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-links a:hover::after {
+      left: 0.75rem;
+      right: 0.75rem;
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .nav-cta a {
+      padding: 0.45rem 1.1rem;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-login {
+      color: var(--gold);
+      border: 1px solid var(--glass-border);
+      border-radius: 2px;
+    }
+
+    .btn-login:hover {
+      border-color: var(--gold);
+      background: var(--glass);
+    }
+
+    .btn-register {
+      background: var(--gold);
+      color: var(--obsidian);
+      font-weight: 600;
+      border-radius: 2px;
+    }
+
+    .btn-register:hover {
+      background: var(--gold-light);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 1.5px;
+      background: var(--gold);
+      transition: var(--transition);
+      display: block;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(10, 6, 8, 0.98);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid var(--glass-border);
+      z-index: 999;
+      flex-direction: column;
+      padding: 5rem 2rem 2rem;
+      gap: 0.5rem;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    .mobile-menu a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--glass-border);
+      transition: color 0.3s;
+      display: block;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--gold);
+    }
+
+    .mobile-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      cursor: pointer;
+      color: var(--gold);
+      font-size: 1.4rem;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 998;
+      display: none;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    /* ============================================================
+   SECTION 03 — Carousel Hero
+   ============================================================ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      transition: transform 8s ease-out;
+    }
+
+    .slide-bg.active {
+      transform: scale(1);
+    }
+
+    .slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(10, 6, 8, 0.82) 0%, rgba(92, 26, 46, 0.3) 50%, rgba(10, 6, 8, 0.75) 100%);
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      max-width: 900px;
+    }
+
+    .slide-eyebrow {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.3s forwards;
+    }
+
+    .slide-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 9vw, 7rem);
+      font-weight: 900;
+      font-style: italic;
+      color: var(--champagne);
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.5s forwards;
+    }
+
+    .slide-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.7s forwards;
+    }
+
+    .slide-cta {
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.9s forwards;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.6rem;
+      z-index: 10;
+    }
+
+    .carousel-dot {
+      width: 30px;
+      height: 2px;
+      background: rgba(201, 169, 110, 0.3);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .carousel-dot.active {
+      background: var(--gold);
+      width: 50px;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      color: var(--gold);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .carousel-arrow:hover {
+      background: var(--gold);
+      color: var(--obsidian);
+      border-color: var(--gold);
+    }
+
+    .carousel-prev {
+      left: 2rem;
+    }
+
+    .carousel-next {
+      right: 2rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================================
+   SECTION 04 — Stats Counter
+   ============================================================ */
+    #stats {
+      background: linear-gradient(180deg, var(--deep-wine) 0%, var(--ink) 100%);
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #stats::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A96E' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .stats-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold));
+      transform: scaleX(0);
+      transition: var(--transition);
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+      background: rgba(201, 169, 110, 0.12);
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-unit {
+      font-size: 1.5rem;
+      color: var(--gold-dark);
+    }
+
+    .stat-label {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      margin-top: 0.75rem;
+      display: block;
+    }
+
+    .stat-icon {
+      font-size: 1.8rem;
+      color: var(--burgundy-lt);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ============================================================
+   SECTION 05 — Wine Timeline
+   ============================================================ */
+    #timeline {
+      background: var(--obsidian);
+      padding: 7rem 2rem;
+      position: relative;
+    }
+
+    .timeline-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .timeline-header {
+      position: sticky;
+      top: 100px;
+    }
+
+    .timeline-header p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+      line-height: 1.9;
+    }
+
+    .timeline-list {
+      position: relative;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 22px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, var(--gold), transparent);
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .timeline-dot {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      background: var(--obsidian);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1rem;
+      position: relative;
+      z-index: 1;
+      margin-top: 0.2rem;
+      transition: var(--transition);
+    }
+
+    .timeline-item:hover .timeline-dot {
+      background: var(--gold);
+      color: var(--obsidian);
+    }
+
+    .timeline-body {}
+
+    .timeline-step {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: var(--burgundy-lt);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--champagne);
+      margin-bottom: 0.6rem;
+    }
+
+    .timeline-body p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 4px;
+      filter: sepia(30%) brightness(0.8) saturate(1.2);
+      transition: var(--transition);
+    }
+
+    .timeline-item:hover .timeline-img {
+      filter: sepia(0%) brightness(0.95) saturate(1.4);
+    }
+
+    .timeline-img-placeholder {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(135deg, var(--burgundy) 0%, var(--deep-wine) 50%, var(--obsidian) 100%);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--glass-border);
+    }
+
+    /* ── Feature Image ── */
+    .feature-img-wrap {
+      max-width: 400px;
+      margin: 0 auto 4rem;
+    }
+
+    .feature-img-wrap img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 6px;
+      filter: sepia(20%) brightness(0.75) saturate(1.3);
+      border: 1px solid var(--glass-border);
+      display: block;
+    }
+
+    .feature-img-caption {
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 0.8rem;
+    }
+
+
+    /* ============================================================
+   SECTION 06 — Enterprise Spirit (Star Layout)
+   ============================================================ */
+    #spirit {
+      background: linear-gradient(180deg, var(--ink) 0%, var(--deep-wine) 50%, var(--ink) 100%);
+      padding: 7rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #spirit::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(92, 26, 46, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .spirit-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .spirit-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .spirit-star {
+      position: relative;
+      width: 100%;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .star-center {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--burgundy-mid), var(--burgundy));
+      border: 2px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 5;
+      box-shadow: 0 0 60px rgba(92, 26, 46, 0.6), 0 0 120px rgba(201, 169, 110, 0.15);
+    }
+
+    .star-center i {
+      font-size: 2.2rem;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .star-center span {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--champagne);
+      letter-spacing: 0.1em;
+    }
+
+    .star-petal {
+      position: absolute;
+      width: 220px;
+      padding: 1.5rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      text-align: center;
+      transition: var(--transition);
+      cursor: default;
+    }
+
+    .star-petal:hover {
+      border-color: var(--gold);
+      background: rgba(201, 169, 110, 0.1);
+      transform: scale(1.05) translateZ(0);
+      z-index: 10;
+    }
+
+    .star-petal i {
+      font-size: 1.8rem;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .star-petal h3 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      color: var(--champagne);
+      margin-bottom: 0.5rem;
+    }
+
+    .star-petal p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+   SECTION 07 — Plans (Diagonal Layout)
+   ============================================================ */
+    #plans {
+      background: var(--obsidian);
+      padding: 7rem 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .plans-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .plans-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      position: relative;
+    }
+
+    .plan-card {
+      padding: 3.5rem 2.5rem;
+      background: var(--deep-wine);
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+    }
+
+    .plan-card:nth-child(2) {
+      transform: translateY(-30px);
+    }
+
+    .plan-card:nth-child(3) {
+      transform: translateY(-15px);
+    }
+
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold), var(--burgundy));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .plan-card:hover::before {
+      opacity: 1;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-40px) !important;
+      background: rgba(92, 26, 46, 0.3);
+    }
+
+    .plan-card.featured {
+      background: linear-gradient(160deg, var(--burgundy) 0%, var(--deep-wine) 100%);
+      border-color: var(--gold);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--gold);
+      color: var(--obsidian);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      padding: 0.3rem 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .plan-tier {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--champagne);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-price {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .plan-price strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .plan-features li {
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .plan-features li i {
+      color: var(--gold);
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+   SECTION 08 — Management Team
+   ============================================================ */
+    #team {
+      background: linear-gradient(180deg, var(--ink) 0%, var(--obsidian) 100%);
+      padding: 7rem 2rem;
+    }
+
+    .team-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .team-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+    }
+
+    .team-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: default;
+    }
+
+    .team-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-wine);
+    }
+
+    .team-avatar-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 200px;
+    }
+
+    .team-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%) sepia(20%);
+      transition: var(--transition);
+    }
+
+    .team-card:hover .team-avatar {
+      filter: grayscale(0%) sepia(0%);
+      transform: scale(1.05);
+    }
+
+    .team-avatar-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(10, 6, 8, 0.8) 0%, transparent 60%);
+    }
+
+    .team-info {
+      padding: 1.2rem;
+    }
+
+    .team-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      color: var(--champagne);
+      margin-bottom: 0.2rem;
+      font-weight: 700;
+    }
+
+    .team-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .team-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .skill-tag {
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--glass-border);
+      font-size: 0.65rem;
+      font-family: 'Josefin Sans', sans-serif;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      background: rgba(201, 169, 110, 0.05);
+    }
+
+    .team-loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      grid-column: 1/-1;
+    }
+
+    .team-loading i {
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    /* ============================================================
+   SECTION 09 — Wine Collection Gallery
+   ============================================================ */
+    #collection {
+      background: var(--obsidian);
+      padding: 7rem 2rem;
+    }
+
+    .collection-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .collection-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .collection-filter {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.4rem;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--gold);
+      color: var(--obsidian);
+      border-color: var(--gold);
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .wine-card {
+      background: var(--deep-wine);
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .wine-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-wine);
+      border-color: var(--gold-dark);
+    }
+
+    .wine-img-wrap {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .wine-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .wine-img-placeholder i {
+      font-size: 3.5rem;
+      color: var(--gold);
+    }
+
+    .wine-img-placeholder span {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .wine-card-body {
+      padding: 1.2rem 1.5rem 1.5rem;
+    }
+
+    .wine-origin {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+      font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .wine-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--champagne);
+      margin-bottom: 0.4rem;
+    }
+
+    .wine-desc {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .wine-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wine-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+    }
+
+    .wine-rating {
+      color: var(--gold);
+      font-size: 0.7rem;
+    }
+
+    .wine-tag {
+      position: absolute;
+      top: 0.8rem;
+      left: 0.8rem;
+      background: var(--burgundy);
+      color: var(--gold-light);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      padding: 0.25rem 0.6rem;
+      font-family: 'Josefin Sans', sans-serif;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+   SECTION 10 — Events & Q&A
+   ============================================================ */
+    #events {
+      background: var(--deep-wine);
+      padding: 7rem 2rem;
+    }
+
+    .events-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .event-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: start;
+      padding: 1.5rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      transition: var(--transition);
+    }
+
+    .event-item:hover {
+      border-color: var(--gold);
+      transform: translateX(6px);
+    }
+
+    .event-date-box {
+      flex-shrink: 0;
+      width: 60px;
+      text-align: center;
+      border: 1px solid var(--gold);
+      padding: 0.5rem;
+    }
+
+    .event-month {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .event-day {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--champagne);
+      line-height: 1;
+      display: block;
+    }
+
+    .event-info h3 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      color: var(--champagne);
+      margin-bottom: 0.3rem;
+    }
+
+    .event-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .event-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--burgundy-lt);
+      color: var(--burgundy-lt);
+      text-transform: uppercase;
+      font-family: 'Josefin Sans', sans-serif;
+      margin-top: 0.5rem;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .faq-item {
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .faq-question:hover {
+      background: rgba(201, 169, 110, 0.07);
+    }
+
+    .faq-question h3 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.95rem;
+      color: var(--champagne);
+      font-weight: 500;
+    }
+
+    .faq-question i {
+      color: var(--gold);
+      transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .faq-answer.open {
+      max-height: 300px;
+    }
+
+    .faq-answer-inner {
+      padding: 0 1.5rem 1.2rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    /* ============================================================
+   SECTION 11 — Testimonials
+   ============================================================ */
+    #testimonials {
+      background: var(--obsidian);
+      padding: 7rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #testimonials::before {
+      content: '"';
+      position: absolute;
+      top: -2rem;
+      left: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 30rem;
+      color: rgba(201, 169, 110, 0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .testi-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testi-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .testi-card {
+      background: var(--deep-wine);
+      border: 1px solid var(--glass-border);
+      padding: 2.5rem;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .testi-card:hover {
+      border-color: var(--gold-dark);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-wine);
+    }
+
+    .testi-quote {
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.5;
+      margin-bottom: 1rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .testi-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .testi-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: var(--burgundy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--champagne);
+      font-family: 'Playfair Display', serif;
+      flex-shrink: 0;
+    }
+
+    .testi-name {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem;
+      color: var(--champagne);
+    }
+
+    .testi-role {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .testi-stars {
+      color: var(--gold);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    /* ============================================================
+   SECTION 12 — Google Map (Street)
+   ============================================================ */
+    #map-street,
+    #map-satellite {
+      padding: 0;
+      position: relative;
+    }
+
+    .map-header {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 10;
+      background: rgba(10, 6, 8, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      padding: 1.5rem 2rem;
+      max-width: 320px;
+    }
+
+    .map-header .section-subtitle {
+      margin-bottom: 0.5rem;
+    }
+
+    .map-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--champagne);
+      margin-bottom: 0.5rem;
+    }
+
+    .map-header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .map-header address {
+      font-style: normal;
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .map-frame {
+      width: 100%;
+      height: 450px;
+      border: none;
+      display: block;
+      filter: sepia(20%) saturate(0.8);
+    }
+
+    /* ============================================================
+   SECTION 14 — Careers
+   ============================================================ */
+    #careers {
+      background: linear-gradient(135deg, var(--deep-wine) 0%, var(--obsidian) 60%, var(--ink) 100%);
+      padding: 7rem 2rem;
+    }
+
+    .careers-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .careers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .careers-text p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin: 1.5rem 0;
+    }
+
+    .jobs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .job-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .job-item:hover {
+      border-color: var(--gold);
+      transform: translateX(6px);
+      background: rgba(201, 169, 110, 0.08);
+    }
+
+    .job-left {}
+
+    .job-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem;
+      color: var(--champagne);
+      margin-bottom: 0.3rem;
+    }
+
+    .job-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'Josefin Sans', sans-serif;
+      letter-spacing: 0.1em;
+    }
+
+    .job-meta span {
+      margin-right: 1rem;
+    }
+
+    .job-meta i {
+      color: var(--gold);
+      margin-right: 0.3rem;
+    }
+
+    .job-arrow {
+      color: var(--gold);
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
+
+    .job-item:hover .job-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ============================================================
+   SECTION 15 — Partner Links
+   ============================================================ */
+    #partners {
+      background: var(--obsidian);
+      padding: 7rem 2rem;
+    }
+
+    .partners-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .partner-card {
+      padding: 2rem 1.5rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      transition: var(--transition);
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .partner-card:hover {
+      border-color: var(--gold);
+      background: rgba(201, 169, 110, 0.08);
+      transform: translateY(-4px);
+    }
+
+    .partner-flag {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .partner-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--champagne);
+      margin-bottom: 0.4rem;
+    }
+
+    .partner-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .partner-link {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 0.75rem;
+      display: block;
+    }
+
+    /* ============================================================
+   SECTION 16 — Footer
+   ============================================================ */
+    #footer {
+      background: var(--ink);
+      padding: 5rem 2rem 2rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand {}
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-logo-icon {
+      font-size: 2rem;
+      color: var(--gold);
+    }
+
+    .footer-logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-logo-cn {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--champagne);
+      letter-spacing: 0.15em;
+    }
+
+    .footer-logo-en {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+    }
+
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .footer-social a {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .footer-social a:hover {
+      background: var(--gold);
+      color: var(--obsidian);
+      border-color: var(--gold);
+    }
+
+    .footer-col h4 {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .footer-col ul a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+
+    .footer-col ul a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'Josefin Sans', sans-serif;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-emblem {
+      font-size: 2.5rem;
+      color: var(--gold);
+      filter: drop-shadow(0 0 12px rgba(201, 169, 110, 0.5));
+    }
+
+    /* ============================================================
+   NOTICE SECTION
+   ============================================================ */
+    #notice {
+      background: var(--deep-wine);
+      padding: 5rem 2rem;
+    }
+
+    .notice-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .notice-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .notice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .notice-card {
+      padding: 2rem;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+    }
+
+    .notice-card i {
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .notice-card h3 {
+      font-family: 'Noto Serif TC', serif;
+      color: var(--champagne);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .notice-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+   REGISTER / LOGIN SECTION
+   ============================================================ */
+    #auth {
+      background: linear-gradient(135deg, var(--obsidian) 0%, var(--deep-wine) 100%);
+      padding: 7rem 2rem;
+    }
+
+    .auth-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .auth-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 3rem;
+    }
+
+    .auth-tab {
+      padding: 0.85rem 3rem;
+      border: 1px solid var(--glass-border);
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .auth-tab.active {
+      background: var(--gold);
+      color: var(--obsidian);
+      border-color: var(--gold);
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full {
+      grid-column: 1/-1;
+    }
+
+    .form-group label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-group input,
+    .form-group select {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text-light);
+      padding: 0.85rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--gold);
+    }
+
+    .form-group input::placeholder {
+      color: rgba(176, 158, 122, 0.4);
+    }
+
+    .form-submit {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    /* ============================================================
+   SCROLL TO TOP
+   ============================================================ */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 46px;
+      height: 46px;
+      background: var(--gold);
+      color: var(--obsidian);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: var(--transition);
+      z-index: 900;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .scroll-top:hover {
+      background: var(--gold-light);
+      transform: translateY(-4px);
+    }
+
+    /* ============================================================
+   RWD — RESPONSIVE
+   ============================================================ */
+    @media (max-width: 1200px) {
+      .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .plans-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+
+      .plan-card:nth-child(2),
+      .plan-card:nth-child(3) {
+        transform: none;
+      }
+
+      .collection-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .events-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .careers-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .timeline-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .timeline-header {
+        position: relative;
+        top: auto;
+      }
+
+      .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+
+      .nav-links,
+      .nav-cta {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr;
+        max-width: 540px;
+        margin: 0 auto;
+      }
+
+      .notice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .collection-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .social-tagline {
+        display: none;
+      }
+
+      section {
+        padding: 4rem 1.2rem !important;
+      }
+
+      .map-header {
+        position: relative;
+        top: auto;
+        left: auto;
+        max-width: 100%;
+      }
+
+      .star-petal {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+      }
+
+      .spirit-star {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        min-height: auto;
+      }
+
+      .star-center {
+        position: relative;
+        grid-column: 1/-1;
+        margin: 0 auto 1rem;
+      }
+
+      .carousel-arrow {
+        display: none;
+      }
+
+      .stats-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .partners-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .plans-grid {
+        max-width: 100%;
+      }
+
+      .auth-tabs {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .stats-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .partners-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .spirit-star {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ──  mobile color optimizations ── */
+    @media (max-width: 768px) {
+      :root {
+        --gold: #D4AF65;
+        --gold-light: #F0DCAA;
+        --gold-dark: #9B7820;
+        --burgundy: #6B2238;
+        --text-muted: #C4A87C;
+      }
+
+      .stat-card {
+        background: rgba(201, 169, 110, 0.07);
+      }
+
+      .wine-card {
+        background: rgba(26, 10, 15, 0.95);
+      }
+
+      .testi-card {
+        background: rgba(26, 10, 15, 0.95);
+      }
+
+      .plan-card {
+        background: rgba(26, 10, 15, 0.9);
+      }
+
+      .job-item {
+        background: rgba(201, 169, 110, 0.07);
+      }
+
+      .faq-item {
+        background: rgba(201, 169, 110, 0.04);
+      }
+
+      .partner-card {
+        background: rgba(201, 169, 110, 0.04);
+      }
+
+      .event-item {
+        background: rgba(201, 169, 110, 0.04);
+      }
+
+      .notice-card {
+        background: rgba(201, 169, 110, 0.04);
+      }
+
+      #spirit {
+        background: linear-gradient(180deg, var(--ink) 0%, #2a0d1a 50%, var(--ink) 100%);
+      }
+
+      #careers {
+        background: linear-gradient(160deg, #1a0a0f 0%, var(--obsidian) 100%);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="grain-overlay"></div>
+  <div class="overlay" id="overlay" onclick="closeMobileMenu()"></div>
+
+  <!-- ============================================================
+     SECTION 01 — Social Bar
+     ============================================================ -->
+  <section id="social-bar">
+    <div class="social-bar-inner">
+      <div class="social-links">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="LINE"><i class="fab fa-line"></i></a>
+        <a href="#" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+      <span class="social-tagline">DINGJI WINE CELLAR — IMPORTED FINE WINES</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 02 — Navigation
+     ============================================================ -->
+  <section id="navbar">
+    <nav class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <i class="fa-solid fa-champagne-glasses nav-logo-icon" style="color:#C9A96E;"></i>
+        <div class="nav-logo-text">
+          <span class="nav-logo-cn">鼎極酒窖</span>
+          <span class="nav-logo-en">DINGJI WINE CELLAR</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li>
+          <h1><a href="#hero">首頁</a></h1>
+        </li>
+        <li>
+          <h1><a href="#spirit">關於我們</a></h1>
+        </li>
+        <li>
+          <h1><a href="#events">活動Q&A</a></h1>
+        </li>
+        <li>
+          <h1><a href="#plans">服務項目</a></h1>
+        </li>
+        <li>
+          <h1><a href="#collection">進口產品</a></h1>
+        </li>
+        <li>
+          <h1><a href="#notice">注意事項</a></h1>
+        </li>
+        <li>
+          <h1><a href="#map-street">公司位址</a></h1>
+        </li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#auth" class="btn-login nav-cta">登入</a>
+        <a href="#auth" class="btn-register nav-cta">註冊</a>
+        <div class="hamburger" id="hamburger" onclick="openMobileMenu()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-close" onclick="closeMobileMenu()"><i class="fa fa-times"></i></div>
+    <a href="#hero" onclick="closeMobileMenu()">首頁</a>
+    <a href="#spirit" onclick="closeMobileMenu()">關於我們</a>
+    <a href="#events" onclick="closeMobileMenu()">活動Q&A</a>
+    <a href="#plans" onclick="closeMobileMenu()">服務項目</a>
+    <a href="#collection" onclick="closeMobileMenu()">進口產品介紹</a>
+    <a href="#notice" onclick="closeMobileMenu()">注意事項</a>
+    <a href="#map-street" onclick="closeMobileMenu()">公司位址</a>
+    <a href="#auth" onclick="closeMobileMenu()">註冊</a>
+    <a href="#auth" onclick="closeMobileMenu()">登入</a>
+  </div>
+
+  <!-- ============================================================
+     SECTION 03 — Carousel Hero
+     ============================================================ -->
+  <section id="hero">
+    <div class="carousel-track" id="carouselTrack">
+
+      <!-- Slide 1 -->
+      <div class="carousel-slide">
+        <div class="slide-bg" id="bg0"
+          style="background: linear-gradient(135deg, #1a0408 0%, #3d0c1a 30%, #5c1a2e 60%, #2a0810 100%); background-image: radial-gradient(ellipse at 30% 50%, rgba(150,40,70,0.4) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(201,169,110,0.15) 0%, transparent 50%), linear-gradient(135deg, #0a0608 0%, #1a0a0f 100%);">
+        </div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <p class="slide-eyebrow">Since 2005 · 台灣頂級進口酒窖</p>
+          <h1 class="slide-title">鼎極珍釀<br>盡在其中</h1>
+          <p class="slide-desc">匯聚歐洲名莊精髓，每一瓶都是歲月與土地的藝術結晶，為您開啟感官的至高饗宴。</p>
+          <div class="slide-cta">
+            <a href="#collection" class="btn-gold"><span>探索珍藏</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="carousel-slide">
+        <div class="slide-bg" id="bg1"
+          style="background: radial-gradient(ellipse at 20% 60%, rgba(120,30,50,0.5) 0%, transparent 55%), radial-gradient(ellipse at 80% 20%, rgba(201,169,110,0.2) 0%, transparent 50%), linear-gradient(200deg, #0f0510 0%, #1a0f08 50%, #0a0608 100%);">
+        </div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <p class="slide-eyebrow">Germany · France · Italy</p>
+          <h1 class="slide-title">世界名莊<br>直送府上</h1>
+          <p class="slide-desc">從萊茵河畔的麗絲玲到波爾多的卡本內蘇維翁，我們精選全球頂級葡萄園的限量佳釀。</p>
+          <div class="slide-cta">
+            <a href="#plans" class="btn-gold"><span>了解方案</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="carousel-slide">
+        <div class="slide-bg" id="bg2"
+          style="background: radial-gradient(ellipse at 60% 40%, rgba(80,20,40,0.6) 0%, transparent 55%), radial-gradient(ellipse at 10% 80%, rgba(201,169,110,0.15) 0%, transparent 50%), linear-gradient(160deg, #050208 0%, #12080d 50%, #1a0a0f 100%);">
+        </div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <p class="slide-eyebrow">Private Cellar · Members Only</p>
+          <h1 class="slide-title">私藏酒窖<br>頂奢體驗</h1>
+          <p class="slide-desc">加入鼎極會員，享有專屬酒窖儲存、品酒師諮詢與珍稀年份優先認購等尊榮服務。</p>
+          <div class="slide-cta">
+            <a href="#auth" class="btn-gold"><span>立即加入</span></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="carousel-arrow carousel-prev" onclick="moveCarousel(-1)"><i class="fa fa-chevron-left"></i></button>
+    <button class="carousel-arrow carousel-next" onclick="moveCarousel(1)"><i class="fa fa-chevron-right"></i></button>
+    <div class="carousel-nav" id="carouselNav"></div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 04 — Stats Counter
+     ============================================================ -->
+  <section id="stats" class="wow fadeIn" data-wow-duration="1s">
+    <div class="stats-inner">
+      <div class="stat-card wow zoomIn" data-wow-duration="0.6s" data-wow-delay="0.1s">
+        <i class="fa-solid fa-wine-bottle stat-icon"></i>
+        <span class="stat-number" data-target="850">0</span><span class="stat-unit"> +</span>
+        <span class="stat-label">珍藏酒款數量</span>
+      </div>
+      <div class="stat-card wow zoomIn" data-wow-duration="0.6s" data-wow-delay="0.2s">
+        <i class="fa-solid fa-users stat-icon"></i>
+        <span class="stat-number" data-target="8888">0</span><span class="stat-unit"> +</span>
+        <span class="stat-label">尊榮會員人數</span>
+      </div>
+      <div class="stat-card wow zoomIn" data-wow-duration="0.6s" data-wow-delay="0.3s">
+        <i class="fa-solid fa-earth-europe stat-icon"></i>
+        <span class="stat-number" data-target="28">0</span><span class="stat-unit"> 國</span>
+        <span class="stat-label">進口來源國家</span>
+      </div>
+      <div class="stat-card wow zoomIn" data-wow-duration="0.6s" data-wow-delay="0.4s">
+        <i class="fa-solid fa-award stat-icon"></i>
+        <span class="stat-number" data-target="19">0</span><span class="stat-unit"> 年</span>
+        <span class="stat-label">專業經營資歷</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 05 — Wine Timeline
+     ============================================================ -->
+  <section id="timeline" class="wow fadeIn">
+    <div class="timeline-inner">
+      <div class="timeline-header wow slideInLeft" data-wow-duration="0.8s">
+        <span class="section-subtitle">Wine Journey</span>
+        <h2 class="section-title">葡萄酒<br>製作流程</h2>
+        <div class="divider-left"></div>
+        <p>從葡萄園到您的酒杯，每一道工序都是自然與人文智慧的完美融合。鼎極嚴選通過有機認證或永續農業標準的名莊，確保每一口都純粹無瑕。</p>
+      </div>
+
+
+      <div class="timeline-list">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item wow slideInRight" data-wow-duration="0.6s" data-wow-delay="0s">
+          <div class="timeline-dot"><i class="fa-solid fa-seedling"></i></div>
+          <div class="timeline-body">
+            <span class="timeline-step">Step 01</span>
+            <h3>葡萄種植與採收</h3>
+            <div class="timeline-img-placeholder"><i class="fa-solid fa-leaf"></i></div>
+            <p>精心選擇土壤微氣候最佳的丘陵坡地，採用低收穫量管理，使果實濃縮糖分與風味物質。嚴格控制採收時機，確保糖度、酸度與酚類物質達到完美平衡點。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item wow slideInRight" data-wow-duration="0.6s" data-wow-delay="0.1s">
+          <div class="timeline-dot"><i class="fa-solid fa-mortar-pestle"></i></div>
+          <div class="timeline-body">
+            <span class="timeline-step">Step 02</span>
+            <h3>破皮去梗與榨汁</h3>
+            <p>採收後即刻進行低溫分選，剔除未熟或受損果粒。傳統整串踩踏或現代氣壓式榨機溫柔萃取澄清果汁，保留葡萄皮中珍貴的單寧與花青素。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item wow slideInRight" data-wow-duration="0.6s" data-wow-delay="0.2s">
+          <div class="timeline-dot"><i class="fa-solid fa-flask"></i></div>
+          <div class="timeline-body">
+            <span class="timeline-step">Step 03</span>
+            <h3>酒精發酵</h3>
+            <div class="timeline-img-placeholder"><i class="fa-solid fa-flask"></i></div>
+            <p>野生酵母或精選培育菌株於溫控不銹鋼槽或橡木桶中緩慢發酵。紅酒帶皮發酵，白酒則低溫慢發以留住清新花果香氣，每日手工淋汁壓帽。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item wow slideInRight" data-wow-duration="0.6s" data-wow-delay="0.3s" roller-1>
+          <div class="timeline-dot"><i class="fa-solid fa-circle-dot"></i></div>
+          <div class="timeline-body">
+            <span class="timeline-step">Step 04</span>
+            <h3>橡木桶熟成陳年</h3>
+            <div class="feature-img-wrap">
+              <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=1200&q=80"
+                alt="Wine cellar barrels" />            
+            </div>
+            <p>轉移至法國利慕贊或美國奧勒岡橡木桶中熟成，桶陳時間從6個月至36個月不等。微氧化過程使酒體結構更為圓潤複雜，融入香草、烘烤與煙燻等迷人風味。</p>
+          </div>
+        </div>
+
+        <div class="timeline-item wow slideInRight" data-wow-duration="0.6s" data-wow-delay="0.4s">
+          <div class="timeline-dot"><i class="fa-solid fa-wine-bottle"></i></div>
+          <div class="timeline-body">
+            <span class="timeline-step">Step 05</span>
+            <h3>裝瓶與酒窖藏存</h3>
+            <div class="timeline-img-placeholder"><i class="fa-solid fa-champagne-glasses"></i></div>
+            <p>經澄清過濾後精準裝瓶封蓋，鼎極酒窖以恆溫14°C、相對濕度70%的環境妥善保存，讓每一瓶佳釀在最完美的狀態等待與您相遇。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 06 — Enterprise Spirit (Star)
+     ============================================================ -->
+  <section id="spirit" class="wow fadeIn">
+    <div class="spirit-inner">
+      <div class="spirit-header">
+        <span class="section-subtitle">Our Philosophy</span>
+        <h2 class="section-title">企業精神</h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-muted); max-width:560px; margin:0 auto;">
+          鼎極酒窖以「頂峰極致」為核心，五大精神軸心相互輝映，共同構築台灣最值得信賴的頂級進口酒窖。</p>
+      </div>
+      <div class="spirit-star" id="spiritStar">
+        <!-- Center -->
+        <div class="star-center">
+          <i class="fa-solid fa-champagne-glasses"></i>
+          <span>鼎極精神</span>
+        </div>
+        <!-- Petals positioned by JS on desktop -->
+        <div class="star-petal wow zoomIn" data-wow-delay="0.1s" id="petal0">
+          <i class="fa-solid fa-gem"></i>
+          <h3>卓越品質</h3>
+          <p>嚴選全球百大酒莊，每款酒品均通過國際侍酒師專業認證，品質絕不妥協。</p>
+        </div>
+        <div class="star-petal wow zoomIn" data-wow-delay="0.2s" id="petal1">
+          <i class="fa-solid fa-handshake"></i>
+          <h3>誠信服務</h3>
+          <p>透明溯源、公正定價，與每位顧客建立長遠互信的美酒夥伴關係。</p>
+        </div>
+        <div class="star-petal wow zoomIn" data-wow-delay="0.3s" id="petal2">
+          <i class="fa-solid fa-leaf"></i>
+          <h3>永續理念</h3>
+          <p>優先引進有機、自然動力農法與碳中和酒莊，守護大地也守護未來。</p>
+        </div>
+        <div class="star-petal wow zoomIn" data-wow-delay="0.4s" id="petal3">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <h3>知識傳遞</h3>
+          <p>定期舉辦品酒課程與莊主訪台活動，讓愛酒文化深根於台灣。</p>
+        </div>
+        <div class="star-petal wow zoomIn" data-wow-delay="0.5s" id="petal4">
+          <i class="fa-solid fa-crown"></i>
+          <h3>尊榮體驗</h3>
+          <p>客製私人酒窖管理、專屬品酒師到府服務，超越期待的尊貴款待。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 07 — Plans (Diagonal)
+     ============================================================ -->
+  <section id="plans" class="wow fadeIn">
+    <div class="plans-inner">
+      <div class="plans-header wow slideInLeft" data-wow-duration="0.7s">
+        <span class="section-subtitle">Membership Plans</span>
+        <h2 class="section-title">主方案介紹</h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-muted);">三種量身訂製的會員方案，無論您是品酒新手或資深收藏家，都能找到最適合的入門之道。</p>
+      </div>
+      <div class="plans-grid">
+        <div class="plan-card wow slideInLeft" data-wow-duration="0.6s" data-wow-delay="0.1s">
+          <div class="plan-tier">入門方案</div>
+          <div class="plan-name">品鑑會員</div>
+          <div class="plan-price">每月 <strong>NT$1,800</strong></div>
+          <ul class="plan-features">
+            <li><i class="fa fa-check"></i> 每月精選紅白酒各1瓶</li>
+            <li><i class="fa fa-check"></i> 線上品酒師諮詢 2次/月</li>
+            <li><i class="fa fa-check"></i> 會員專屬折扣 8折</li>
+            <li><i class="fa fa-check"></i> 電子版品酒筆記</li>
+            <li><i class="fa fa-check"></i> 年度品酒會邀請</li>
+          </ul>
+          <a href="#auth" class="btn-gold"><span>立即入會</span></a>
+        </div>
+
+        <div class="plan-card featured wow slideInUp" data-wow-duration="0.6s" data-wow-delay="0.2s">
+          <div class="plan-badge">最受歡迎</div>
+          <div class="plan-tier">旗艦方案</div>
+          <div class="plan-name">典藏會員</div>
+          <div class="plan-price">每月 <strong>NT$4,500</strong></div>
+          <ul class="plan-features">
+            <li><i class="fa fa-check"></i> 每月精選名莊酒款6瓶</li>
+            <li><i class="fa fa-check"></i> 專屬品酒師無限諮詢</li>
+            <li><i class="fa fa-check"></i> 尊榮折扣 75折</li>
+            <li><i class="fa fa-check"></i> 私人酒窖存酒服務</li>
+            <li><i class="fa fa-check"></i> 莊主訪台活動優先名額</li>
+            <li><i class="fa fa-check"></i> 限量年份優先認購</li>
+          </ul>
+          <a href="#auth" class="btn-gold"><span>立即入會</span></a>
+        </div>
+
+        <div class="plan-card wow slideInRight" data-wow-duration="0.6s" data-wow-delay="0.3s">
+          <div class="plan-tier">至尊方案</div>
+          <div class="plan-name">鼎極會員</div>
+          <div class="plan-price">每年 <strong>NT$120,000</strong></div>
+          <ul class="plan-features">
+            <li><i class="fa fa-check"></i> 無限量珍藏酒款選購</li>
+            <li><i class="fa fa-check"></i> 駐點品酒師到府服務</li>
+            <li><i class="fa fa-check"></i> 企業收藏級管理服務</li>
+            <li><i class="fa fa-check"></i> 歐洲名莊私人參訪行程</li>
+            <li><i class="fa fa-check"></i> 全年保溫配送到府</li>
+            <li><i class="fa fa-check"></i> 個人化風格酒款策展</li>
+          </ul>
+          <a href="#auth" class="btn-gold"><span>立即入會</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 08 — Management Team (Random User API)
+     ============================================================ -->
+  <section id="team" class="wow fadeIn">
+    <div class="team-inner">
+      <div class="team-header wow slideInLeft" data-wow-duration="0.7s">
+        <span class="section-subtitle">Our Leadership</span>
+        <h2 class="section-title">管理幹部</h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-muted);">我們的核心團隊由國際侍酒師、葡萄酒學者與行銷專家組成，共同守護鼎極的品質承諾。</p>
+      </div>
+      <div class="team-grid" id="teamGrid">
+        <div class="team-loading">
+          <i class="fa fa-spinner fa-spin"></i>
+          <p>正在載入管理幹部資訊⋯</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 09 — Wine Collection
+     ============================================================ -->
+  <section id="collection" class="wow fadeIn">
+    <div class="collection-inner">
+      <div class="collection-header wow slideInLeft" data-wow-duration="0.7s">
+        <span class="section-subtitle">Curated Selection</span>
+        <h2 class="section-title">進口產品介紹</h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-muted);">精選四大洲逾28個產區的頂級佳釀，每款均有完整溯源資料與品酒師評鑑報告。</p>
+      </div>
+      <div class="collection-filter">
+        <button class="filter-btn active" onclick="filterWines(this,'all')">全部</button>
+        <button class="filter-btn" onclick="filterWines(this,'red')">紅葡萄酒</button>
+        <button class="filter-btn" onclick="filterWines(this,'white')">白葡萄酒</button>
+        <button class="filter-btn" onclick="filterWines(this,'sparkling')">氣泡酒</button>
+        <button class="filter-btn" onclick="filterWines(this,'dessert')">甜酒</button>
+      </div>
+      <div class="collection-grid" id="wineGrid">
+        <!-- Wines injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 10 — Events & FAQ
+     ============================================================ -->
+  <section id="events" class="wow fadeIn">
+    <div class="events-inner">
+      <div style="text-align:center; margin-bottom:4rem;" class="wow slideInLeft">
+        <span class="section-subtitle">Events & FAQ</span>
+        <h2 class="section-title">活動 & 常見問答</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="events-grid">
+        <div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--champagne);margin-bottom:2rem;">
+            即將舉辦的活動</h3>
+          <div class="events-list">
+            <div class="event-item wow slideInLeft" data-wow-delay="0.1s">
+              <div class="event-date-box"><span class="event-month">May</span><span class="event-day">08</span></div>
+              <div class="event-info">
+                <h3>德國麗絲玲春季品酒會</h3>
+                <p>特邀摩澤爾河谷頂級莊主 Sebastian Klein 來台，親自解說2022年份限量佳釀。</p>
+                <span class="event-tag">限額30人</span>
+              </div>
+            </div>
+            <div class="event-item wow slideInLeft" data-wow-delay="0.2s">
+              <div class="event-date-box"><span class="event-month">May</span><span class="event-day">22</span></div>
+              <div class="event-info">
+                <h3>波爾多名莊垂直品飲</h3>
+                <p>一次品嚐五個年份的瑪歌酒莊，深入了解氣候對風土的影響，附侍酒師解說。</p>
+                <span class="event-tag">會員專屬</span>
+              </div>
+            </div>
+            <div class="event-item wow slideInLeft" data-wow-delay="0.3s">
+              <div class="event-date-box"><span class="event-month">Jun</span><span class="event-day">14</span></div>
+              <div class="event-info">
+                <h3>義大利葡萄酒文化沙龍</h3>
+                <p>從托斯卡尼的奇揚第到西西里島的黑達沃拉，一夕探索義大利葡萄酒的多元面貌。</p>
+                <span class="event-tag">公開報名</span>
+              </div>
+            </div>
+            <div class="event-item wow slideInLeft" data-wow-delay="0.4s">
+              <div class="event-date-box"><span class="event-month">Jul</span><span class="event-day">06</span></div>
+              <div class="event-info">
+                <h3>夏日氣泡酒派對</h3>
+                <p>香檳、卡瓦、普羅塞克大集合，與好友在鼎極酒窖享受最清爽的仲夏夜晚。</p>
+                <span class="event-tag">開放報名</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--champagne);margin-bottom:2rem;">
+            常見問答 Q&A</h3>
+          <div class="faq-list">
+            <div class="faq-item wow fadeInRight" data-wow-delay="0.1s">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>如何加入鼎極會員？</h3>
+                <i class="fa fa-chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">點擊網站右上角「註冊」按鈕，填寫基本資料後選擇適合您的會員方案即可完成加入。整個流程約需5分鐘，加入後立即享有會員權益。</div>
+              </div>
+            </div>
+            <div class="faq-item wow fadeInRight" data-wow-delay="0.2s">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>進口酒款如何保存溫度？</h3>
+                <i class="fa fa-chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">所有進口酒款全程冷鏈運輸，抵台後存入我們恆溫14°C、濕度70%的專業酒窖。典藏會員以上可使用我司私人存酒服務，確保您的珍藏始終處於最佳狀態。
+                </div>
+              </div>
+            </div>
+            <div class="faq-item wow fadeInRight" data-wow-delay="0.3s">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>是否提供企業團購服務？</h3>
+                <i class="fa fa-chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">當然！我們提供企業贈禮、尾牙活動、商務宴請等客製化服務，10瓶以上可享特別折扣，並附專業酒款選配建議書。請聯絡我們的企業服務專員。</div>
+              </div>
+            </div>
+            <div class="faq-item wow fadeInRight" data-wow-delay="0.4s">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>海外名莊訂購需要等多久？</h3>
+                <i class="fa fa-chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">現貨商品3-5個工作天到府，客製預訂或特殊年份酒款約需4-8週進口清關。典藏會員以上享有免費保溫宅配服務，全台皆可送達。</div>
+              </div>
+            </div>
+            <div class="faq-item wow fadeInRight" data-wow-delay="0.5s">
+              <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>品酒活動如何報名？</h3>
+                <i class="fa fa-chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">請至網站「活動」專區查看即將舉辦的品酒活動，點選喜愛的場次填寫報名表。會員活動優先開放給現有會員報名，一般公開場次則先到先得。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 11 — Testimonials
+     ============================================================ -->
+  <section id="testimonials" class="wow fadeIn">
+    <div class="testi-inner">
+      <div class="testi-header wow slideInLeft" data-wow-duration="0.7s">
+        <span class="section-subtitle">Client Stories</span>
+        <h2 class="section-title">顧客心聲</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card wow slideInLeft" data-wow-delay="0.1s">
+          <div class="testi-quote">"</div>
+          <p class="testi-text">自從加入典藏會員後，每月收到精選酒款成了我最期待的日子。品酒師的推薦信總是準確命中我的喜好，去年波爾多那瓶Pomerol更是讓我驚豔不已。</p>
+          <div class="testi-author">
+            <div class="testi-avatar">林</div>
+            <div>
+              <div class="testi-name">林 O 婷</div>
+              <div class="testi-role">典藏會員 · 三年</div>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card wow slideInUp" data-wow-delay="0.2s">
+          <div class="testi-quote">"</div>
+          <p class="testi-text">每年公司尾牙都委託鼎極策劃餐酒搭配，他們對企業形象的理解和選酒的品味讓合作夥伴印象深刻，連續三年收到最高評價，強力推薦！</p>
+          <div class="testi-author">
+            <div class="testi-avatar">陳</div>
+            <div>
+              <div class="testi-name">陳 O 宇</div>
+              <div class="testi-role">企業客戶 · 科技業副總</div>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card wow slideInRight" data-wow-delay="0.3s">
+          <div class="testi-quote">"</div>
+          <p class="testi-text">因緣際會參加了德國麗絲玲品酒會，才知道原來白酒可以如此複雜迷人。現在我的酒窖裡超過一半都是鼎極引進的德國酒，每瓶都是故事。</p>
+          <div class="testi-author">
+            <div class="testi-avatar">王</div>
+            <div>
+              <div class="testi-name">王 O 誠</div>
+              <div class="testi-role">品鑑會員 · 一年半</div>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 12 — Google Map (Street)
+     ============================================================ -->
+  <section id="map-street">
+    <div class="map-header wow slideInLeft" data-wow-duration="0.7s">
+      <span class="section-subtitle">Find Us</span>
+      <h2>鼎極酒窖</h2>
+      <address><i class="fa fa-location-dot"></i>台中市西屯區市政路xxx號</address>
+      <p style="margin-top:0.5rem; font-size:0.8rem; color:var(--text-muted);">週一至週六 10:00 – 20:00 ｜ 週日 12:00 – 18:00
+      </p>
+    </div>
+    <iframe class="map-frame"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14597.19!2d120.6389!3d24.1629!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693e7b4f77b1c3%3A0x0!2z5Y-w5Lit5biC6KW_5bKn5Y2A5biC5pS_6Lev!5e0!3m2!1szh-TW!2stw!4v1700000000000"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="街道地圖">
+    </iframe>
+  </section>
+
+  <!-- ============================================================
+     SECTION 13 — Google Map (Satellite)
+     ============================================================ -->
+  <section id="map-satellite">
+    <div class="map-header wow slideInRight" data-wow-duration="0.7s">
+      <span class="section-subtitle">Satellite View</span>
+      <h2>衛星地圖定位</h2>
+      <address><i class="fa fa-satellite"></i>台中市西屯區市政路xxx號</address>
+      <p style="margin-top:0.5rem; font-size:0.8rem; color:var(--text-muted);">免費停車 ｜ 捷運藍線市政府站步行6分鐘</p>
+    </div>
+    <iframe class="map-frame"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.04!2d120.6389!3d24.1629!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693e7b4f77b1c3%3A0x0!2z5Y-w5Lit5biC6KW_5bKn5Y2A5biC5pS_6Lev!5e1!3m2!1szh-TW!2stw!4v1700000000001"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="衛星地圖">
+    </iframe>
+  </section>
+
+  <!-- ============================================================
+     SECTION — Notice (注意事項)
+     ============================================================ -->
+  <section id="notice" class="wow fadeIn">
+    <div class="notice-inner">
+      <div class="notice-header wow slideInLeft">
+        <span class="section-subtitle">Important Notice</span>
+        <h2 class="section-title">注意事項</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="notice-grid">
+        <div class="notice-card wow slideInLeft" data-wow-delay="0.1s">
+          <i class="fa-solid fa-shield-halved"></i>
+          <h3>年齡限制聲明</h3>
+          <p>本網站販售酒精性飲料，依法僅供18歲（含）以上成年人購買。未成年人禁止購買或飲用酒精飲料，本公司保留拒絕交易之權利。</p>
+        </div>
+        <div class="notice-card wow slideInUp" data-wow-delay="0.2s">
+          <i class="fa-solid fa-temperature-low"></i>
+          <h3>儲存運送說明</h3>
+          <p>葡萄酒應存放於12–16°C、避光陰涼環境，勿橫放於有震動之處。我司提供全程恆溫配送，收貨後請靜置至少24小時再飲用。</p>
+        </div>
+        <div class="notice-card wow slideInRight" data-wow-delay="0.3s">
+          <i class="fa-solid fa-rotate-left"></i>
+          <h3>退換貨政策</h3>
+          <p>商品如有品質問題，請於收貨72小時內附照片聯繫客服，我司將安排免費取件並補寄新品或全額退款，以顧客滿意為最高原則。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION — Register / Login
+     ============================================================ -->
+  <section id="auth" class="wow fadeIn">
+    <div class="auth-inner">
+      <div style="text-align:center; margin-bottom:3rem;" class="wow slideInLeft">
+        <span class="section-subtitle">Member Portal</span>
+        <h2 class="section-title">會員中心</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('register')">立即註冊</button>
+        <button class="auth-tab" onclick="switchTab('login')">會員登入</button>
+      </div>
+      <div class="auth-form active" id="form-register">
+        <div class="form-grid">
+          <div class="form-group"><label>姓名</label><input type="text" placeholder="您的姓名"></div>
+          <div class="form-group"><label>電話</label><input type="tel" placeholder="09XX-XXX-XXX"></div>
+          <div class="form-group"><label>電子信箱</label><input type="email" placeholder="email@example.com"></div>
+          <div class="form-group"><label>出生年份（確認年齡）</label><input type="number" placeholder="西元年份" min="1900"
+              max="2007"></div>
+          <div class="form-group"><label>設定密碼</label><input type="password" placeholder="至少8位數"></div>
+          <div class="form-group"><label>確認密碼</label><input type="password" placeholder="再次輸入密碼"></div>
+          <div class="form-group full"><label>選擇方案</label>
+            <select>
+              <option>品鑑會員 — NT$1,800/月</option>
+              <option>典藏會員 — NT$4,500/月</option>
+              <option>鼎極會員 — NT$120,000/年</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-submit"><button class="btn-gold" onclick="handleAuth('register')"><span>完成註冊</span></button>
+        </div>
+      </div>
+      <div class="auth-form" id="form-login">
+        <div class="form-grid" style="max-width:500px; margin:0 auto;">
+          <div class="form-group full"><label>電子信箱</label><input type="email" placeholder="email@example.com"></div>
+          <div class="form-group full"><label>密碼</label><input type="password" placeholder="輸入密碼"></div>
+        </div>
+        <div class="form-submit"><button class="btn-gold" onclick="handleAuth('login')"><span>登入帳號</span></button></div>
+        <p style="text-align:center; color:var(--text-muted); font-size:0.82rem; margin-top:1rem; cursor:pointer;">忘記密碼？
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 14 — Careers
+     ============================================================ -->
+  <section id="careers" class="wow fadeIn">
+    <div class="careers-inner">
+      <div style="text-align:center; margin-bottom:4rem;" class="wow slideInLeft">
+        <span class="section-subtitle">Join Our Team</span>
+        <h2 class="section-title">徵才廣告</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="careers-grid">
+        <div class="wow slideInLeft" data-wow-duration="0.7s">
+          <p>加入鼎極酒窖，成為台灣最精緻進口酒窖的一份子。我們尋找對葡萄酒充滿熱忱、願意與我們一起推動台灣品酒文化的優秀人才。</p>
+          <p>我們提供業界頂尖薪資、國際進修機會、定期免費品酒培訓，以及充滿活力的工作環境。</p>
+          <a href="mailto:hr@dingjiwine.com.tw" class="btn-gold"
+            style="margin-top:1.5rem;display:inline-block;"><span>投遞履歷</span></a>
+        </div>
+        <div class="jobs-list">
+          <div class="job-item wow slideInRight" data-wow-delay="0.1s">
+            <div class="job-left">
+              <div class="job-title">資深侍酒師 / Sommelier</div>
+              <div class="job-meta"><span><i class="fa fa-location-dot"></i>台中</span><span><i
+                    class="fa fa-clock"></i>全職</span><span><i class="fa fa-dollar-sign"></i>面議</span></div>
+            </div>
+            <i class="fa fa-arrow-right job-arrow"></i>
+          </div>
+          <div class="job-item wow slideInRight" data-wow-delay="0.2s">
+            <div class="job-left">
+              <div class="job-title">數位行銷專員</div>
+              <div class="job-meta"><span><i class="fa fa-location-dot"></i>台中</span><span><i
+                    class="fa fa-clock"></i>全職</span><span><i class="fa fa-dollar-sign"></i>月薪45K起</span></div>
+            </div>
+            <i class="fa fa-arrow-right job-arrow"></i>
+          </div>
+          <div class="job-item wow slideInRight" data-wow-delay="0.3s">
+            <div class="job-left">
+              <div class="job-title">進口採購專員</div>
+              <div class="job-meta"><span><i class="fa fa-location-dot"></i>台中</span><span><i
+                    class="fa fa-clock"></i>全職</span><span><i class="fa fa-dollar-sign"></i>月薪40K起</span></div>
+            </div>
+            <i class="fa fa-arrow-right job-arrow"></i>
+          </div>
+          <div class="job-item wow slideInRight" data-wow-delay="0.4s">
+            <div class="job-left">
+              <div class="job-title">客戶關係管理 CRM</div>
+              <div class="job-meta"><span><i class="fa fa-location-dot"></i>台中</span><span><i
+                    class="fa fa-clock"></i>全職</span><span><i class="fa fa-dollar-sign"></i>月薪38K起</span></div>
+            </div>
+            <i class="fa fa-arrow-right job-arrow"></i>
+          </div>
+          <div class="job-item wow slideInRight" data-wow-delay="0.5s">
+            <div class="job-left">
+              <div class="job-title">倉儲物流作業員</div>
+              <div class="job-meta"><span><i class="fa fa-location-dot"></i>台中</span><span><i
+                    class="fa fa-clock"></i>全職</span><span><i class="fa fa-dollar-sign"></i>月薪33K起</span></div>
+            </div>
+            <i class="fa fa-arrow-right job-arrow"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 15 — German Wine Partner Links
+     ============================================================ -->
+  <section id="partners" class="wow fadeIn">
+    <div class="partners-inner">
+      <div class="wow slideInLeft" data-wow-duration="0.7s">
+        <span class="section-subtitle">Official Partners</span>
+        <h2 class="section-title">德國葡萄酒友站連結</h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-muted); max-width:620px; margin:0 auto;">鼎極酒窖與德國葡萄酒官方協會及頂級酒莊建立長期合作夥伴關係，直接引進原產地認證酒款。
+        </p>
+      </div>
+      <div class="partners-grid">
+        <a href="https://www.deutscheweine.de" target="_blank" rel="noopener" class="partner-card wow zoomIn"
+          data-wow-delay="0.1s">
+          <div class="partner-flag">🇩🇪</div>
+          <div class="partner-name">Deutsches Weininstitut</div>
+          <div class="partner-desc">德國葡萄酒協會官方機構，推廣全德13大產區品牌形象。</div>
+          <span class="partner-link">www.deutscheweine.de →</span>
+        </a>
+        <a href="https://www.moselwein.de" target="_blank" rel="noopener" class="partner-card wow zoomIn"
+          data-wow-delay="0.2s">
+          <div class="partner-flag">🍇</div>
+          <div class="partner-name">Weinland Mosel</div>
+          <div class="partner-desc">摩澤爾河谷麗絲玲產區推廣協會，代表德國最優雅的白酒文化。</div>
+          <span class="partner-link">www.moselwein.de →</span>
+        </a>
+        <a href="https://www.vdp.de" target="_blank" rel="noopener" class="partner-card wow zoomIn"
+          data-wow-delay="0.3s">
+          <div class="partner-flag">🦅</div>
+          <div class="partner-name">VDP — Verband Deutscher Prädikatsweingüter</div>
+          <div class="partner-desc">德國頂級酒莊聯盟，成員涵蓋200家以上的卓越名莊。</div>
+          <span class="partner-link">www.vdp.de →</span>
+        </a>
+        <a href="https://www.deutscheweine.de" target="_blank" rel="noopener" class="partner-card wow zoomIn"
+          data-wow-delay="0.4s">
+          <div class="partner-flag">🏰</div>
+          <div class="partner-name">Rheingau Wein</div>
+          <div class="partner-desc">萊茵高產區協會，以斯坦因堡特級園聞名世界的精英產區。</div>
+          <span class="partner-link">www.rheingau-wein.de →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     SECTION 16 — Footer
+     ============================================================ -->
+  <section id="footer" class="wow fadeIn">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand wow slideInLeft" data-wow-delay="0.1s">
+          <div class="footer-logo">
+            <i class="fa-solid fa-champagne-glasses footer-logo-icon"></i>
+            <div class="footer-logo-text">
+              <span class="footer-logo-cn">鼎極酒窖</span>
+              <span class="footer-logo-en">DINGJI WINE CELLAR</span>
+            </div>
+          </div>
+          <p>自2005年深耕台灣葡萄酒市場，以卓越品質、誠信服務與尊榮體驗為核心，成為台灣頂級進口酒窖的首選品牌。</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-line"></i></a>
+            <a href="#"><i class="fab fa-x-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col wow fadeInUp" data-wow-delay="0.2s">
+          <h4>快速連結</h4>
+          <ul>
+            <li><a href="#hero">首頁</a></li>
+            <li><a href="#spirit">關於我們</a></li>
+            <li><a href="#plans">服務方案</a></li>
+            <li><a href="#collection">進口產品</a></li>
+            <li><a href="#events">活動Q&A</a></li>
+          </ul>
+        </div>
+        <div class="footer-col wow fadeInUp" data-wow-delay="0.3s">
+          <h4>顧客服務</h4>
+          <ul>
+            <li><a href="#notice">注意事項</a></li>
+            <li><a href="#auth">會員登入</a></li>
+            <li><a href="#auth">立即註冊</a></li>
+            <li><a href="#careers">加入我們</a></li>
+            <li><a href="#partners">合作夥伴</a></li>
+          </ul>
+        </div>
+        <div class="footer-col wow fadeInUp" data-wow-delay="0.4s">
+          <h4>聯絡資訊</h4>
+          <ul>
+            <li><a href="#map-street"><i class="fa fa-location-dot"
+                  style="color:var(--gold); margin-right:0.4rem;"></i>台中市西屯區市政路xxx號</a></li>
+            <li><a href="tel:+886422262xxx"><i class="fa fa-phone"
+                  style="color:var(--gold); margin-right:0.4rem;"></i>(04) 2226-2xxx</a></li>
+            <li><a href="mailto:info@dingjiwine.com.tw"><i class="fa fa-envelope"
+                  style="color:var(--gold); margin-right:0.4rem;"></i>info@dingjiwine.com.tw</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          © 2025 鼎極酒窖股份有限公司 DINGJI WINE CELLAR CO., LTD. All Rights Reserved.<br>
+          <span style="font-size:0.7rem; opacity:0.6;">飲酒過量，有礙健康。禁止酒駕，未成年請勿飲酒。</span>
+        </div>
+        <div class="footer-emblem">
+          <i class="fa-solid fa-champagne-glasses" style="color:var(--gold);"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+  <script>
+    /* ── WOW Init ── */
+    new WOW({ offset: 80, mobile: true }).init();
+
+    /* ── Carousel ── */
+    let currentSlide = 0;
+    const totalSlides = 3;
+    const track = document.getElementById('carouselTrack');
+    const navContainer = document.getElementById('carouselNav');
+
+    // Build dots
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+      dot.onclick = () => goToSlide(i);
+      navContainer.appendChild(dot);
+    }
+
+    function goToSlide(n) {
+      currentSlide = (n + totalSlides) % totalSlides;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+      // Ken Burns effect
+      document.querySelectorAll('.slide-bg').forEach((bg, i) => {
+        bg.classList.toggle('active', i === currentSlide);
+      });
+    }
+    function moveCarousel(dir) { goToSlide(currentSlide + dir); }
+    goToSlide(0);
+    setInterval(() => moveCarousel(1), 6000);
+
+    /* ── Counter Animation ── */
+    let countersTriggered = false;
+    function animateCounters() {
+      if (countersTriggered) return;
+      const statsSection = document.getElementById('stats');
+      const rect = statsSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.85) {
+        countersTriggered = true;
+        document.querySelectorAll('.stat-number').forEach(el => {
+          const target = parseInt(el.dataset.target);
+          const duration = 2000;
+          const step = target / (duration / 16);
+          let current = 0;
+          const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = Math.floor(current).toLocaleString();
+            if (current >= target) clearInterval(timer);
+          }, 16);
+        });
+      }
+    }
+    window.addEventListener('scroll', animateCounters);
+    animateCounters();
+
+    /* ── Mobile Menu ── */
+    function openMobileMenu() {
+      document.getElementById('mobileMenu').classList.add('open');
+      document.getElementById('overlay').classList.add('show');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    /* ── Scroll Top Button ── */
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 500);
+    });
+
+    /* ── FAQ Toggle ── */
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-answer').classList.remove('open');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.classList.add('open');
+      }
+    }
+
+    /* ── Auth Tab Switch ── */
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (tab === 'register' && i === 0) || (tab === 'login' && i === 1)));
+      document.getElementById('form-register').classList.toggle('active', tab === 'register');
+      document.getElementById('form-login').classList.toggle('active', tab === 'login');
+    }
+    function handleAuth(type) {
+      alert(type === 'register' ? '✅ 註冊成功！歡迎加入鼎極酒窖！' : '✅ 登入成功！歡迎回來！');
+    }
+
+    /* ── Wine Filter ── */
+    function filterWines(btn, category) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.wine-card').forEach(card => {
+        const show = category === 'all' || card.dataset.category === category;
+        card.style.display = show ? '' : 'none';
+      });
+    }
+
+    /* ── Wine Data ── */
+    const wines = [
+      { name: 'Egon Müller Scharzhofberger Riesling Spätlese', origin: '德國 · 薩爾河谷', desc: '礦物質感十足，蜂蜜與白桃香氣交織，酸度清脆，餘韻綿長達45秒。', price: 'NT$8,500', rating: 5, category: 'white', tag: '年份精選', gradient: 'linear-gradient(135deg,#0d1a0a,#1a2d10)' },
+      { name: 'Château Margaux Premier Grand Cru Classé', origin: '法國 · 波爾多', desc: '絲絨般單寧，黑醋栗、雪松與煙燻香料完美融合，層次複雜迷人。', price: 'NT$28,000', rating: 5, category: 'red', tag: '限量珍藏', gradient: 'linear-gradient(135deg,#1a0505,#2d0a0a)' },
+      { name: 'Moët & Chandon Dom Pérignon Vintage', origin: '法國 · 香檳', desc: '細緻氣泡如珍珠串升，烘烤麵包與白花香氣，是每個慶典最完美的選擇。', price: 'NT$6,800', rating: 5, category: 'sparkling', tag: '經典香檳', gradient: 'linear-gradient(135deg,#1a1505,#2d2810)' },
+      { name: 'Pichler Grüner Veltliner Smaragd', origin: '奧地利 · 瓦豪', desc: '奧地利白葡萄酒王者，胡椒辛香與白柚鮮味，礦物質尾韻令人難忘。', price: 'NT$3,200', rating: 5, category: 'white', tag: '有機認證', gradient: 'linear-gradient(135deg,#0a1a10,#102d18)' },
+      { name: 'Barolo Brunate Cerequio DOCG', origin: '義大利 · 皮蒙特', desc: '「葡萄酒之王」橡木桶陳36個月，焦油、玫瑰、無花果，結構磅礴威嚴。', price: 'NT$12,000', rating: 5, category: 'red', tag: 'DOCG認證', gradient: 'linear-gradient(135deg,#1a0810,#2d101a)' },
+      { name: 'Château d\'Yquem Sauternes Premier Cru', origin: '法國 · 蘇玳', desc: '世界最偉大甜白酒，貴腐葡萄釀製，杏桃蜜、薑汁與橘皮濃郁交疊。', price: 'NT$15,500', rating: 5, category: 'dessert', tag: '甜酒之王', gradient: 'linear-gradient(135deg,#1a1500,#2d2808)' },
+      { name: 'Prüm Wehlener Sonnenuhr Auslese', origin: '德國 · 摩澤爾', desc: '百年名莊標誌性酒款，檸檬、青蘋果與礦石香，是德國麗絲玲的完美詮釋。', price: 'NT$4,200', rating: 5, category: 'white', tag: '名莊直送', gradient: 'linear-gradient(135deg,#0a150a,#15251a)' },
+      { name: 'Ribera del Duero Vega Sicilia Único', origin: '西班牙 · 杜埃羅河岸', desc: '西班牙最頂級紅酒，多年桶陳賦予咖啡、黑莓與香草的深邃複雜性格。', price: 'NT$18,000', rating: 5, category: 'red', tag: '西班牙頂峰', gradient: 'linear-gradient(135deg,#150810,#251020)' },
+    ];
+
+    function buildWineGrid() {
+      const grid = document.getElementById('wineGrid');
+      grid.innerHTML = wines.map((w, i) => `
+    <div class="wine-card wow fadeInUp" data-wow-delay="${i * 0.08}s" data-category="${w.category}">
+      <span class="wine-tag">${w.tag}</span>
+      <div class="wine-img-wrap">
+        <div class="wine-img-placeholder" style="background:${w.gradient};">
+          <i class="fa-solid fa-wine-bottle"></i>
+          <span>${w.origin.split('·')[0].trim()}</span>
+        </div>
+      </div>
+      <div class="wine-card-body">
+        <div class="wine-origin">${w.origin}</div>
+        <div class="wine-name">${w.name}</div>
+        <div class="wine-desc">${w.desc}</div>
+        <div class="wine-footer">
+          <div class="wine-price">${w.price}</div>
+          <div class="wine-rating">${'★'.repeat(w.rating)}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+    }
+    buildWineGrid();
+
+    /* ── Team from Random User API ── */
+    const skills = [
+      '葡萄酒評鑑', '侍酒服務', '酒窖管理', '採購策略', '法國酒', '德國酒',
+      '義大利酒', '西班牙酒', '新世界酒', '氣泡酒', '甜酒', '有機葡萄酒',
+      '數位行銷', '品牌經營', '客戶關係', '物流管理', '財務分析', '人力資源'
+    ];
+    const titles = ['執行長', '總經理', '品酒師總監', '採購總監', '行銷總監', '客服總監', '財務長', '技術長', '物流總監', '人資長', '業務總監', '研發主任', '品牌經理', '法務長', '公關總監'];
+
+    async function loadTeam() {
+      try {
+        const res = await fetch('https://randomuser.me/api/?results=15&nat=tw,jp,kr,cn');
+        const data = await res.json();
+        const grid = document.getElementById('teamGrid');
+        grid.innerHTML = data.results.map((user, i) => {
+          const name = user.name.last + (user.name.first ? ' ' + user.name.first : '');
+          const skillCount = Math.floor(Math.random() * 2) + 2;
+          const shuffled = [...skills].sort(() => 0.5 - Math.random()).slice(0, skillCount);
+          return `
+        <div class="team-card wow fadeInUp" data-wow-delay="${i * 0.06}s">
+          <div class="team-avatar-wrap">
+            <img class="team-avatar" src="${user.picture.large}" alt="${name}" loading="lazy">
+            <div class="team-avatar-overlay"></div>
+          </div>
+          <div class="team-info">
+            <div class="team-name">${user.name.last}${user.name.first}</div>
+            <div class="team-title">${titles[i]}</div>
+            <div class="team-skills">${shuffled.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+          </div>
+        </div>
+      `;
+        }).join('');
+        new WOW({ offset: 80 }).init();
+      } catch (e) {
+        document.getElementById('teamGrid').innerHTML = '<div class="team-loading"><i class="fa fa-exclamation-circle"></i><p>載入失敗，請稍後再試。</p></div>';
+      }
+    }
+    loadTeam();
+
+    /* ── Star Layout (Desktop) ── */
+    function layoutStar() {
+      if (window.innerWidth < 768) return;
+      const center = { x: 0, y: 0 };
+      const radius = 260;
+      const petals = document.querySelectorAll('.star-petal');
+      const startAngle = -Math.PI / 2;
+      petals.forEach((petal, i) => {
+        const angle = startAngle + (i * 2 * Math.PI / petals.length);
+        const x = center.x + radius * Math.cos(angle);
+        const y = center.y + radius * Math.sin(angle);
+        petal.style.position = 'absolute';
+        petal.style.left = `calc(50% + ${x}px - 110px)`;
+        petal.style.top = `calc(50% + ${y}px - 80px)`;
+        petal.style.transform = 'none';
+      });
+      document.getElementById('spiritStar').style.height = '700px';
+    }
+    window.addEventListener('resize', layoutStar);
+    window.addEventListener('load', layoutStar);
+    setTimeout(layoutStar, 100);
+  </script>
+</body>
+
+</html>
